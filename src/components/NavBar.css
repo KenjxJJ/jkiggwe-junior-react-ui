@@ -1,10 +1,10 @@
 /* Navigation Bar */
 nav{
-    /* display: block; */
     position: relative;
 }
+
 header.navigation {
-    margin: 28px 0 32px;
+    margin: 0px 0px 2rem;
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
@@ -38,9 +38,14 @@ header.navigation {
 }
 
 /* Logo Icon */
+#logo-wrapper
+{
+    flex:  0 0 14%;
+    justify-self: center;
+}
 #logo {
     display: inline-block;
-    width: 28px;
+    width: 33px;
 }
 
 /* Action-Buttons */
