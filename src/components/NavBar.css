@@ -1,6 +1,9 @@
 /* Navigation Bar */
-
-header {
+nav{
+    /* display: block; */
+    position: relative;
+}
+header.navigation {
     margin: 28px 0 32px;
     display: flex;
     justify-content: space-between;

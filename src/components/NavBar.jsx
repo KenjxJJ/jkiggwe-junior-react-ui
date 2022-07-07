@@ -7,7 +7,8 @@ export class NavBarComponent extends Component {
   render() {
     return (
       <>
-        <header>
+      <nav>
+        <header className="navigation">
           <div className="category-name">
             <span>
              Women
@@ -30,6 +31,7 @@ export class NavBarComponent extends Component {
             <span id="cart-btn"><img src={cartIcon} alt="cart-icon"/></span>
           </div>
         </header>
+        </nav>
       </>
     );
   }
