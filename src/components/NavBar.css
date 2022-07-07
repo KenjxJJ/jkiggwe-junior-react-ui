@@ -1,0 +1,18 @@
+/* Navigation Bar */
+
+header{
+ margin: 1.3rem;
+ display: flex;
+ justify-content: space-between;
+ text-transform: uppercase;
+ font-size: 75%;
+}
+
+span{
+    padding: 1rem;
+    margin: 0.4rem;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
