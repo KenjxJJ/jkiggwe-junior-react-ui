@@ -28,6 +28,18 @@ export class CategoryComponent extends Component {
               <h2 className="title">Apollo Running Short</h2>
               <h3 className="price-label">$50.00</h3>
             </section>
+            
+            <section className="item">
+              <img className="item-image" src={productD} />
+              <h2 className="title">Apollo Running Short</h2>
+              <h3 className="price-label">$50.00</h3>
+            </section>
+            
+            <section className="item">
+              <img className="item-image" src={productD} />
+              <h2 className="title">Apollo Running Short</h2>
+              <h3 className="price-label">$50.00</h3>
+            </section>
           </div>
         </main>
       </>
