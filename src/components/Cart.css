@@ -1,0 +1,146 @@
+.cart-details {
+    position: absolute;
+    width: 90vw;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 3rem;
+    left: 0;
+}
+
+.cart-details h1 {
+    text-transform: capitalize;
+    font-size: 32px;
+    line-height: 40px;
+    font-style: normal;
+    font-weight: 700;
+    color: #1d1f22;
+}
+
+.cart-details h2 {
+    text-transform: capitalize;
+}
+
+/* Each cart item  */
+.cart-item {
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-description-detail {
+    flex: 0 0 45%;
+}
+
+p.product-price-label {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Image Display Section with Quantity */
+.image-quantity-section {
+    display: flex;
+    flex: 0 0 40%;
+    justify-content: flex-end;
+}
+
+.quantifiers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.quantifiers>*:not(.quantity-value) {
+    border: 1px solid #1d1f22;
+    padding: 0.5rem 1rem;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.image-wrapper {
+    display: flex;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.image-wrapper>img {
+    width: 100%;
+}
+
+.arrows {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+}
+
+.arrows>* {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.73);
+    color: #fff;
+    font-size: 150%;
+    padding: 8px 6px;
+    margin-right: 0.5rem;
+}
+
+.left-arrow::before {
+    content: "<";
+    /* transform: matrix(-1, 0, 0, 1, 0, 0); */
+}
+
+.right-arrow::before {
+    content: ">";
+
+}
+
+/* Order-Details */
+.order-details {
+    width: 25%;
+    font-size: 18px;
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-details>p {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+p>span {
+    flex: 0 0 50%;
+}
+
+.order-details>p>span:nth-child(2) {
+    font-weight: 600;
+    text-align: justify;
+}
+
+
+.order-btn {
+    background: #5ECE7B;
+    border: #5ECE7B;
+    width: 100%;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 16px 32px;
+}
+
+.order-btn:active {
+    opacity: 0.8;
+}
