@@ -1,5 +1,5 @@
 /* Navigation Bar */
-nav{
+nav {
     position: relative;
 }
 
@@ -38,11 +38,11 @@ header.navigation {
 }
 
 /* Logo Icon */
-#logo-wrapper
-{
-    flex:  0 0 14%;
+#logo-wrapper {
+    flex: 0 0 14%;
     justify-self: center;
 }
+
 #logo {
     display: inline-block;
     width: 33px;
@@ -55,6 +55,7 @@ header.navigation {
     padding: 0.5rem;
 }
 
+/* Currency Switcher */
 #currency-switcher {
     font-size: 18px;
     line-height: 160%;
@@ -71,6 +72,34 @@ header.navigation {
     font-size: 14px;
 }
 
+/* Cart Button */
 #cart-btn {
+    position: relative;
     padding-right: 1.5rem;
+}
+
+#cart-number-icon {
+    position: absolute;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    top: -5px;
+    right: 5px;
+    border-radius: 50%;
+    background: rgba(29, 31, 34, 1);
+    color: #FFFFFF;
+    width: 20px;
+    height: 20px;
+
+}
+
+.cart-icon {
+    z-index: 2;
+    width: 120%;
+    /* width: 20px;
+    height: 20px; */
 }

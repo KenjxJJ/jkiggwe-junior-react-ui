@@ -109,20 +109,19 @@ class CartComponent extends Component {
           <div className="order-details">
             <p className="tax">
               {" "}
-              <span>Tax 21%: </span> 
+              <span>Tax 21%: </span>
               <span>$42.00</span>
             </p>
             <p className="cart-quantity">
-              <span>Quantity:</span> 
+              <span>Quantity:</span>
               <span>3</span>
             </p>
             <p className="cart-total-price">
               <span>Total: </span>
               <span>$200.00</span>
             </p>
-          <button className="order-btn">Order</button>
+            <button className="order-btn">Order</button>
           </div>
-
         </main>
       </>
     );
