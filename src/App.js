@@ -3,20 +3,18 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CategoryComponent from './components/Category';
 import NavBarComponent from './components/NavBar';
-import ProductComponent from './components/Product';
-import Cart from './components/Cart';
-import CartComponent from './components/Cart';
-
+import ProductComponent from './components/Product';import CartComponent from './components/Cart';
 export default class App extends Component {
   render() {
     return (
       <>
-        <NavBarComponent />
         <Router>
+        <NavBarComponent />
           <Routes>
             <Route element={<CategoryComponent/>} path="/" />
             <Route element={<ProductComponent/>} path="/product" />
             <Route element={<CartComponent/>} path="/order" />
+            {/* <Route element={<CartOverlayComponent/>} path="/overlay" /> */}
           </Routes>
         </Router>
       </>

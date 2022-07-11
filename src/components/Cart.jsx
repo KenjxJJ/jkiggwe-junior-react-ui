@@ -1,11 +1,9 @@
-// import PropTypes from 'prop-types'
 import React, { Component } from "react";
 import "./Product.css";
 import "./Cart.css";
 import productD from "../assets/Product D.jpg";
 
 class CartComponent extends Component {
-  //   static propTypes = {}
 
   render() {
     const style1 = "Blue";
@@ -17,7 +15,7 @@ class CartComponent extends Component {
 
           <div className="cart-items">
             <div className="cart-item">
-              <section className="product-description-detail">
+              <section className="cart-detail-item product-description-detail">
                 <h1 className="brand">Apollo</h1>
                 <h2 className="product-name">Running Short</h2>
                 <p className="product-price-label">$50.00</p>
@@ -61,7 +59,7 @@ class CartComponent extends Component {
               </div>
             </div>
             <div className="cart-item">
-              <section className="product-description-detail">
+              <section className="cart-detail-item product-description-detail">
                 <h1 className="brand">Apollo</h1>
                 <h2 className="product-name">Running Short</h2>
                 <p className="product-price-label">$50.00</p>
