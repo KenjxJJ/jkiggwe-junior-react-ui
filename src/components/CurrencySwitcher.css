@@ -1,0 +1,32 @@
+.currency-widget {
+    z-index: 100;
+    width: 114px;
+    position: absolute;
+    top: 55px;
+    right: 5%;
+    background: #ffffff;
+    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+    box-sizing: content-box;
+}
+
+
+.currency-widget span {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 13px;
+    display: block;
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 160%;
+    text-align: left;
+    color: #1D1F22;
+}
+
+.currency-widget span:focus,
+.currency-widget span:hover,
+.currency-widget span:active {
+    background: #eee;
+
+}

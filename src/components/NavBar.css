@@ -61,6 +61,8 @@ header.navigation {
     line-height: 160%;
     font-weight: 500;
     padding: .8rem;
+    position: relative;
+    cursor: pointer;
 }
 
 #currency-switcher::after {
