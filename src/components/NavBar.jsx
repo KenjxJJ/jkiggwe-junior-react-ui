@@ -60,6 +60,8 @@ export class NavBarComponent extends Component {
               <span id="cart-btn" onClick={this.showMyBag}>
                 <span id="cart-number-icon">3</span>
                 <img className="cart-icon" src={cartIcon} alt="cart-icon" />
+              {/* Cart Overlay */}
+                {this.state.showBag === true && <CartOverlayComponent />}
               </span>
 
               {/* Overlay Backdrop */}
@@ -68,10 +70,8 @@ export class NavBarComponent extends Component {
                   show={this.state.showBag}
                   clicked={this.closeOverlayHandler}
                 />
-              )}
+                )}
 
-              {/* Cart Overlay */}
-              {this.state.showBag === true && <CartOverlayComponent />}
             </div>
           </header>
         </nav>
