@@ -9,7 +9,6 @@ h1 {
     font-size: 42px;
     line-height: 160%;
     color: #1D1F22;
-
 }
 
 /* Items Section */
@@ -18,10 +17,11 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    
+
 }
 
-.items-wrapper > 
+.items-wrapper
+
 /* Item */
 .item {
     padding: 1rem;
@@ -31,6 +31,12 @@ h1 {
     margin-left: 2rem;
     margin-bottom: 4.5rem;
 
+}
+
+a {
+    text-decoration: none;
+    font-size: unset;
+    color: unset;
 }
 
 .item-image {
@@ -44,6 +50,7 @@ h1 {
     letter-spacing: 0px;
     text-align: left;
     margin-bottom: 0rem;
+    text-transform: capitalize;
 
 }
 

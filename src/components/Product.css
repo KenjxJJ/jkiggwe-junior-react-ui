@@ -86,8 +86,8 @@ section:not(.product-description-text) {
 }
 
 .product-size-label {
-    /* flex: 0 0 25%; */
-    width: 22px;
+    flex: 0 0 15%;
+    /* width: 42px; */
     font-family: 'Source Sans Pro', sans-serif;
     border: 1px solid #1D1F22;
     font-weight: 400;
