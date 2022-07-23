@@ -21,21 +21,27 @@ header.navigation {
 }
 
 /* Category Name */
-.category-name>span {
+.category-name>a {
     font-size: 1rem;
     font-weight: 400;
     line-height: 120%;
     font-style: normal;
     padding: 1.5rem 1.4rem;
+    cursor: pointer;
 }
 
-.category-name>span:focus,
-.category-name>span:hover,
-.category-name>span:active {
-    font-weight: 600;
-    color: #5ECE7B;
-    border-bottom: 2px solid#5ECE7B;
+.category-name>a:focus,
+.category-name>a:active,
+.category-name>a:hover {
+    color: #5ECE7B !important;
+    font-weight: 600 !important;
 }
+
+a.nav-link-active:active,
+.category-name>a:focus {
+    border-bottom: 2px solid#5ECE7B !important;
+}
+
 
 /* Logo Icon */
 #logo-wrapper {
@@ -83,7 +89,7 @@ header.navigation {
 
 #cart-number-icon {
     position: absolute;
-    visibility:visible;
+    visibility: visible;
     display: flex;
     justify-content: center;
     align-items: center;

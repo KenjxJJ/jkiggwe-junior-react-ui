@@ -6,23 +6,34 @@ import CartOverlayComponent from "./CartOverlay";
 import BackdropComponent from "./Backdrop";
 import CurrencySwitcherComponent from "./CurrencySwitcher";
 
-export class NavBarComponent extends Component {
-  constructor() {
-    super();
+import { connect } from "react-redux";
+import {
+  getCategoryNames,
+  getCategoryByTitle,
+  loadCategoryDetails,
+} from "../actions/categoriesActions";
+
+class NavBarComponent extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       showBag: false,
-      displayCurrencySwitcher: false
+      displayCurrencySwitcher: false,
+      category_names: [{ title: "all" }],
     };
 
     this.showCurrencySwitcher = this.showCurrencySwitcher.bind(this);
     this.showMyBag = this.showMyBag.bind(this);
+    this.selectCategoryName = this.selectCategoryName.bind(this);
     this.closeOverlayHandler = this.closeOverlayHandler.bind(this);
   }
   // Show currency switcher
   showCurrencySwitcher = () => {
-    this.setState({ displayCurrencySwitcher: !this.state.displayCurrencySwitcher });
+    this.setState({
+      displayCurrencySwitcher: !this.state.displayCurrencySwitcher,
+    });
   };
-  
+
   // Display the Cart Overlay
   showMyBag = () => {
     this.setState({ showBag: !this.state.showBag });
@@ -33,15 +44,43 @@ export class NavBarComponent extends Component {
     this.setState({ showBag: false });
   };
 
+  // Select Category by name(title)
+  selectCategoryName = async (_title) => {
+    await this.props.getCategoryByTitle(_title);
+  };
+
+  async componentDidMount() {
+    const { getCategoryNames } = this.props;
+    await getCategoryNames();
+    // Set the category names
+    this.setState({ category_names: this.props.names });
+    // Obtain the first result's title
+    this.selectCategoryName(this.props.names[0]);
+  }
+
   render() {
+    let className = "nav-link-active";
+    if (this.props.isActive) {
+      className += "nav-link-active";
+    } 
+
     return (
       <>
         <nav>
           <header className="navigation">
             <div className="category-name">
-              <span>Women</span>
-              <span>Men</span>
-              <span>Kids</span>
+              {this.state.category_names.map(({ title }) => {
+                return (
+                  <a
+                    href="#"
+                    className={className}
+                    key={title}
+                    onClick={(title) => this.selectCategoryName(title)}
+                  >
+                    {title}
+                  </a>
+                );
+              })}
             </div>
             <div id="logo-wrapper">
               <img id="logo" src={logoIcon} alt="Logo" />
@@ -53,14 +92,15 @@ export class NavBarComponent extends Component {
                 onClick={this.showCurrencySwitcher}
               >
                 $
-              {this.state.displayCurrencySwitcher === true && <CurrencySwitcherComponent />}
+                {this.state.displayCurrencySwitcher === true && (
+                  <CurrencySwitcherComponent />
+                )}
               </span>
-
 
               <span id="cart-btn" onClick={this.showMyBag}>
                 <span id="cart-number-icon">3</span>
                 <img className="cart-icon" src={cartIcon} alt="cart-icon" />
-              {/* Cart Overlay */}
+                {/* Cart Overlay */}
                 {this.state.showBag === true && <CartOverlayComponent />}
               </span>
 
@@ -70,8 +110,7 @@ export class NavBarComponent extends Component {
                   show={this.state.showBag}
                   clicked={this.closeOverlayHandler}
                 />
-                )}
-
+              )}
             </div>
           </header>
         </nav>
@@ -80,4 +119,13 @@ export class NavBarComponent extends Component {
   }
 }
 
-export default NavBarComponent;
+// Redux Operations
+const mapStateToProps = (state) => ({
+  names: state.category.names,
+});
+
+export default connect(mapStateToProps, {
+  getCategoryNames,
+  getCategoryByTitle,
+  loadCategoryDetails,
+})(NavBarComponent);
