@@ -4,12 +4,12 @@ import { getCategory } from "../queries/CategoryQuery";
 
 export const getCategoryByTitle = (categoryTitle) => {
     return async (dispatch) => {
-        const { category } = await getCategory({ categoryTitle });
+        const title = { title : categoryTitle };
+        let { category } = await getCategory(title);
         dispatch({
             type: GET_CATEGORY_BY_TITLE,
             payload: category
         });
-        loadCategoryDetails();
     };
 };
 

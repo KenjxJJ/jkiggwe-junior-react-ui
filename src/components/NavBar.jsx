@@ -19,7 +19,7 @@ class NavBarComponent extends Component {
     this.state = {
       showBag: false,
       displayCurrencySwitcher: false,
-      category_names: [{ title: "all" }],
+      categoryNames: [{ title: "all" }],
     };
 
     this.showCurrencySwitcher = this.showCurrencySwitcher.bind(this);
@@ -46,36 +46,42 @@ class NavBarComponent extends Component {
 
   // Select Category by name(title)
   selectCategoryName = async (_title) => {
+    this.setState({ categoryName: _title });
     await this.props.getCategoryByTitle(_title);
   };
 
+  // On Mount
   async componentDidMount() {
     const { getCategoryNames } = this.props;
     await getCategoryNames();
     // Set the category names
-    this.setState({ category_names: this.props.names });
+    this.setState({ categoryNames: this.props.names });
+
     // Obtain the first result's title
-    this.selectCategoryName(this.props.names[0]);
+    let title = this.props.names[0];
+    this.selectCategoryName(title.title);
   }
 
   render() {
     let className = "nav-link-active";
     if (this.props.isActive) {
       className += "nav-link-active";
-    } 
+    }
 
     return (
       <>
         <nav>
           <header className="navigation">
             <div className="category-name">
-              {this.state.category_names.map(({ title }) => {
+              {this.state.categoryNames.map(({ title }) => {
                 return (
                   <a
                     href="#"
                     className={className}
                     key={title}
-                    onClick={(title) => this.selectCategoryName(title)}
+                    onClick={() => {
+                      this.selectCategoryName(title);
+                    }}
                   >
                     {title}
                   </a>

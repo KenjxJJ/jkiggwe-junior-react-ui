@@ -5,7 +5,7 @@ const initialState = {
     names: []
 }
 
-export default function (state = initialState, action) {
+export default function categoriesReducers(state = initialState, action) {
     switch (action.type) {
         case GET_CATEGORY_NAMES:
             return {

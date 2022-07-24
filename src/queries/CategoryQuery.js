@@ -1,8 +1,8 @@
 import { client, Query, Field } from '@tilework/opus';
 
-export const getCategory = async ({item}) => {
+export const getCategory = async (item) => {
     client.setEndpoint("http://localhost:4000/");
-    return await client.post(categoryQuery({item}));
+    return await client.post(categoryQuery(item));
 }
 
 // {
@@ -38,9 +38,9 @@ export const getCategory = async ({item}) => {
 //   }
 
 
-const categoryQuery = ({title}) => {
-  return new Query("category", true)
-        .addArgument("input", "CategoryInput!", title)
+const categoryQuery = (_title) => {
+    return new Query("category", true)
+        .addArgument("input", "CategoryInput!", _title)
         .addField("name")
         .addField(new Field("products", true)
             .addField("id")
