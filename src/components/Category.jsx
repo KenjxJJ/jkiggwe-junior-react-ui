@@ -13,12 +13,16 @@ class CategoryComponent extends Component {
     super(props);
     this.state = {
       category: null,
+      currencyIndex : 0 // Default 0 - USD Currency
     };
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.category !== prevProps.category) {
       this.setState({ category: this.props.category[0] });
+    }
+    if (this.props.currencyIndex !== prevProps.currencyIndex) {
+      this.setState({ currencyIndex : this.props.currencyIndex });
     }
   }
 
@@ -29,8 +33,8 @@ class CategoryComponent extends Component {
   }
 
   render() {
-    const { category } = this.state;
-    let currency_index = 0; // Default 0 - USD
+    const { category, currencyIndex } = this.state;
+    
 
     if (category !== null) {
       const { products, name } = category;
@@ -51,8 +55,8 @@ class CategoryComponent extends Component {
                           {brand} {name}
                         </h2>
                         <h3 className="price-label">
-                          {prices[currency_index].currency.symbol}
-                          {prices[currency_index].amount}
+                          {prices[currencyIndex].currency.symbol}
+                          {prices[currencyIndex].amount}
                         </h3>
                       </a>
                     </section>
@@ -75,7 +79,8 @@ class CategoryComponent extends Component {
 // Redux Operations
 const mapStateToProps = (state) => {
   const category = state.category.category;
-  return { category };
+  const currencyIndex = state.category.currencyIndex;
+  return { category, currencyIndex };
 };
 
 export default connect(mapStateToProps, {

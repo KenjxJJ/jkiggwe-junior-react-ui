@@ -78,6 +78,10 @@ a.nav-link-active:active,
     transform: rotate(90deg);
     padding: 0.7rem;
     font-size: 14px;
+    transition:  transform 50ms ease-in;
+}
+.inverted#currency-switcher::after {
+    transform: rotate(-90deg)  !important;
 }
 
 /* Cart Button */

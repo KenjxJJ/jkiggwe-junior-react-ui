@@ -19,6 +19,8 @@ class NavBarComponent extends Component {
     this.state = {
       showBag: false,
       displayCurrencySwitcher: false,
+      currencySymbol: "$",
+      inverted : false,
       categoryNames: [{ title: "all" }],
     };
 
@@ -32,6 +34,8 @@ class NavBarComponent extends Component {
     this.setState({
       displayCurrencySwitcher: !this.state.displayCurrencySwitcher,
     });
+    // Animated opening and closing
+    this.setState({inverted : !this.state.inverted})
   };
 
   // Display the Cart Overlay
@@ -43,6 +47,20 @@ class NavBarComponent extends Component {
   closeOverlayHandler = () => {
     this.setState({ showBag: false });
   };
+
+
+  componentDidUpdate(prevProps) {
+
+    // Obtain the currency selected using currency index location in currencies
+    if (this.props.currencyIndex !== prevProps.currencyIndex) {
+      const currencyIndex = this.props.currencyIndex;
+      const [currencies] = this.props.currencies;
+      const { symbol } = currencies.find((curr, index) => {
+        if (index === currencyIndex) return curr;
+      });
+      this.setState({ currencySymbol: symbol });
+    }
+  }
 
   // Select Category by name(title)
   selectCategoryName = async (_title) => {
@@ -95,9 +113,10 @@ class NavBarComponent extends Component {
               <span
                 name="currency-switcher"
                 id="currency-switcher"
+                className={ this.state.inverted ? 'inverted' : ""}
                 onClick={this.showCurrencySwitcher}
               >
-                $
+                {this.state.currencySymbol}
                 {this.state.displayCurrencySwitcher === true && (
                   <CurrencySwitcherComponent />
                 )}
@@ -128,6 +147,9 @@ class NavBarComponent extends Component {
 // Redux Operations
 const mapStateToProps = (state) => ({
   names: state.category.names,
+  category: state.category.category,
+  currencyIndex: state.category.currencyIndex,
+  currencies: state.category.currencies,
 });
 
 export default connect(mapStateToProps, {
