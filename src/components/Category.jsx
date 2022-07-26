@@ -13,7 +13,7 @@ class CategoryComponent extends Component {
     super(props);
     this.state = {
       category: null,
-      currencyIndex : 0 // Default 0 - USD Currency
+      currencyIndex: 0, // Default 0 - USD Currency
     };
   }
 
@@ -22,7 +22,7 @@ class CategoryComponent extends Component {
       this.setState({ category: this.props.category[0] });
     }
     if (this.props.currencyIndex !== prevProps.currencyIndex) {
-      this.setState({ currencyIndex : this.props.currencyIndex });
+      this.setState({ currencyIndex: this.props.currencyIndex });
     }
   }
 
@@ -34,7 +34,6 @@ class CategoryComponent extends Component {
 
   render() {
     const { category, currencyIndex } = this.state;
-    
 
     if (category !== null) {
       const { products, name } = category;
@@ -46,22 +45,39 @@ class CategoryComponent extends Component {
             </header>
             <div className="items-wrapper">
               {products &&
-                products.map(({ id, name, brand, prices, gallery }) => {
-                  return (
-                    <section className="item" key={id}>
-                      <img className="item-image" src={gallery[0]} alt="" />
-                      <a href={id}>
-                        <h2 className="title">
-                          {brand} {name}
-                        </h2>
-                        <h3 className="price-label">
-                          {prices[currencyIndex].currency.symbol}
-                          {prices[currencyIndex].amount}
-                        </h3>
-                      </a>
-                    </section>
-                  );
-                })}
+                products.map(
+                  ({ id, name, brand, prices, inStock, gallery }) => {
+                    return (
+                      <>
+                        <section className="item" key={id}>
+                          <div
+                            className={
+                              !inStock
+                                ? "img-wrapper img-overlay"
+                                : "img-wrapper"
+                            }
+                          >
+                            {!inStock ? <div className="out-of-stock-text">Out of stock</div> : ""}
+                            <img
+                              className="item-image"
+                              src={gallery[0]}
+                              alt=""
+                            />
+                          </div>
+                          <a href={id}>
+                            <h2 className="title">
+                              {brand} {name}
+                            </h2>
+                            <h3 className="price-label">
+                              {prices[currencyIndex].currency.symbol}
+                              {prices[currencyIndex].amount}
+                            </h3>
+                          </a>
+                        </section>
+                      </>
+                    );
+                  }
+                )}
             </div>
           </main>
         </>
