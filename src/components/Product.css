@@ -157,8 +157,9 @@ section:not(.product-description-text) {
     background-color: #ce4d4d;
     display: inline-block;
     margin-right: 0.5rem;
-    border: 1px solid #fff;
+    border: 1px solid  rgba(94, 206, 124, 0.336);
     padding: 0.2rem;
+    cursor: pointer;
 }
 
 .product-color:focus,
