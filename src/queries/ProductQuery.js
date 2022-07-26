@@ -45,6 +45,7 @@ const productQuery = (product_id) => {
         )
         .addField(new Field("attributes")
             .addField("id")
+            .addField("type")
             .addField(new Field("items")
                 .addField("id")
                 .addField("displayValue")

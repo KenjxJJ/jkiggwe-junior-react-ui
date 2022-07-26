@@ -78,12 +78,12 @@ class ProductComponent extends Component {
               <h2 className="product-name">{name}</h2>
               <section className="product-attributes">
                 {attributes &&
-                  attributes.map(({ id, items }) => {
+                  attributes.map(({ id, type, items }) => {
                     return (
                       <>
                         <p>{id}:</p>
                         <div className="product-info-attributes">
-                          {id !== "Color" &&
+                          {type !== "swatch" &&
                             items.map(({ id, value }) => {
                               return (
                                 <span key={id} className="product-attributes-label">
@@ -91,7 +91,7 @@ class ProductComponent extends Component {
                                 </span>
                               );
                             })}
-                          {id === "Color" &&
+                          {type === "swatch" &&
                             items.map(({ id, value }) => {
                               return (
                                 <span
@@ -106,16 +106,6 @@ class ProductComponent extends Component {
                     );
                   })}
               </section>
-              {/* <section className="product-color-attributes">
-                <p>Color:</p>
-                <div className="product-color-selection">
-                  <span
-                    className="product-color"
-                    style={{ backgroundColor: style1 }}
-                  ></span>
-                </div>
-              </section> */}
-
               <section className="product-price">
                 <p>Price:</p>
                 <span className="product-price-label">
