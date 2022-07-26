@@ -1,24 +1,37 @@
-// import PropTypes from 'prop-types'
 import React, { Component } from "react";
 import "./Product.css";
-import productD from "../assets/Product D.jpg";
-import { getProduct } from "../queries/ProductQuery";
-import { useLocation } from "react-router-dom";
+import { connect } from "react-redux";
+import { getProductById } from "../actions/categoriesActions";
 
 class ProductComponent extends Component {
   constructor() {
     super();
-
     this.state = {
       _product: null,
+      imageLinkToDisplay: null,
     };
+
+    this.imageSelectedHandler = this.imageSelectedHandler.bind(this);
   }
+
+  imageSelectedHandler = ( img) => {
+    const _img = img;
+    this.setState({ imageLinkToDisplay: _img });
+  };
+  
   // TODO - Initialize state for product
   async componentDidMount() {
     // Obtain id from the browser
     const id = window.location.pathname.substring(1);
-    const { product } = await getProduct(id);
+    await this.props.getProductById(id);
+    
+    // Obtain product info from store
+    const product = this.props.product;
     this.setState({ _product: product });
+
+    // Set default image
+    const defaultImage = this.props.product.gallery[0];
+    this.setState({ imageLinkToDisplay: defaultImage });
   }
 
   render() {
@@ -28,7 +41,6 @@ class ProductComponent extends Component {
       const {
         id,
         name,
-        inStock,
         gallery,
         attributes,
         brand,
@@ -42,11 +54,22 @@ class ProductComponent extends Component {
           <main className="product-description">
             <div className="product-image-lists">
               {gallery.map((imgLink) => {
-                return <img src={imgLink} alt="" />;
+                return (
+                  <>
+                    <div
+                      className="img-wrapper-two"
+                      onClick={() =>
+                        this.imageSelectedHandler(imgLink)
+                      }
+                    >
+                      <img src={imgLink} alt="" />
+                    </div>
+                  </>
+                );
               })}
             </div>
             <div className="product-image-large-display">
-              <img src={productD} alt="" />
+              <img src={this.state.imageLinkToDisplay} alt="" />
             </div>
             <div className="product-description-detail">
               <h1 className="brand">{brand}</h1>
@@ -115,4 +138,7 @@ class ProductComponent extends Component {
   }
 }
 
-export default ProductComponent;
+const mapStateToProps = (state)=>({
+  product : state.category.product
+})
+export default connect(mapStateToProps, { getProductById })(ProductComponent);

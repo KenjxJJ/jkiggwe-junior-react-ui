@@ -1,7 +1,8 @@
-import { GET_CATEGORY_BY_TITLE, GET_CURRENCIES, CHANGE_CURRENCY_INDEX, LOAD_CATEGORY, GET_CATEGORY_NAMES } from './types'
+import { GET_CATEGORY_BY_TITLE, GET_PRODUCT_BY_ID, GET_CURRENCIES, CHANGE_CURRENCY_INDEX, LOAD_CATEGORY, GET_CATEGORY_NAMES } from './types'
 import { getCategories } from "../queries/CategoriesQuery";
 import { getCategory } from "../queries/CategoryQuery";
 import { getCurrencies } from "../queries/CurrencySwitcherQuery";
+import { getProduct } from "../queries/ProductQuery";
 
 
 export const getCategoryByTitle = (categoryTitle) => {
@@ -19,10 +20,12 @@ export const getCategoryNames = () => {
     return async (dispatch) => {
         const { categories } = await getCategories();
         const categoriesListNames = await categories.map(({ name }) => {
-            return { title:
-                 name };
+            return {
+                title:
+                    name
+            };
         });
-        
+
         dispatch({
             type: GET_CATEGORY_NAMES, payload: categoriesListNames
         });
@@ -33,7 +36,6 @@ export const loadCategoryDetails = () =>
 ({
     type: LOAD_CATEGORY
 })
-
 
 // Change currency 
 export const changeCurrency = (_label) => {
@@ -47,10 +49,22 @@ export const getAllCurrencies = () => {
     //    obtain currencies list  
     return async (dispatch) => {
         const { currencies } = await getCurrencies();
-        
+
         dispatch({
             type: GET_CURRENCIES,
             payload: currencies
+        })
+    }
+}
+
+// Fetch product by id
+export const getProductById = (id) => {
+    //    obtain product  
+    return async (dispatch) => {
+        const { product } = await getProduct(id);
+        dispatch({
+            type: GET_PRODUCT_BY_ID,
+            payload: product
         })
     }
 }
