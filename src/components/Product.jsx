@@ -68,23 +68,25 @@ class ProductComponent extends Component {
                 );
               })}
             </div>
+
             <div className="product-image-large-display">
               <img src={this.state.imageLinkToDisplay} alt="" />
             </div>
+            
             <div className="product-description-detail">
               <h1 className="brand">{brand}</h1>
               <h2 className="product-name">{name}</h2>
-              <section className="product-size">
+              <section className="product-attributes">
                 {attributes &&
                   attributes.map(({ id, items }) => {
                     return (
                       <>
                         <p>{id}:</p>
-                        <div className="product-size-attributes">
+                        <div className="product-info-attributes">
                           {id !== "Color" &&
                             items.map(({ id, value }) => {
                               return (
-                                <span key={id} className="product-size-label">
+                                <span key={id} className="product-attributes-label">
                                   {value}
                                 </span>
                               );

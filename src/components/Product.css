@@ -13,12 +13,30 @@
 .product-image-lists {
     flex: 0 0 10%;
     padding: 0 1rem;
-    /* width: 100px; */
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-    /* overflow-y: scroll; */
-    /* overflow-x:hidden; */
+    overflow-y: scroll;
+    height: 80vh;
+    border-bottom: 1px solid #eee;
+}
+
+/* Scroll Bar */
+.product-image-lists::-webkit-scrollbar-track {
+    padding: 2px 0;
+    border: 1px solid rgb(240, 229, 229);
+    background-color: rgb(240, 229, 229);
+}
+
+.product-image-lists::-webkit-scrollbar {
+    width: 6px;
+}
+
+.product-image-lists::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #1d1f2281;
+    border: 1px solid rgba(216, 214, 214, 0.836);
+    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.664);
 }
 
 /* Each image  */
@@ -33,13 +51,12 @@
     width: 99.6%;
     border: 1px solid rgba(94, 206, 124, 0.301);
     transition: width 1ms ease-in;
-
 }
 
 /* 2nd Column -  Large Preview */
 .product-image-large-display {
     flex: 0 0 40%;
-    margin-right: 5rem;    
+    margin-right: 5rem;
 }
 
 .product-image-large-display>img {
@@ -74,9 +91,8 @@ section:not(.product-description-text) {
 
 }
 
-/* Product-Size Section */
-
-.product-size>p {
+/* Product-Attributes Section */
+.product-attributes>p {
     font-family: 'Roboto Condensed', sans-serif;
     line-height: 18px;
     display: block;
@@ -84,7 +100,7 @@ section:not(.product-description-text) {
     font-size: 18px;
 }
 
-.product-size-attributes {
+.product-info-attributes {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -93,7 +109,7 @@ section:not(.product-description-text) {
     margin-bottom: 24px;
 }
 
-.product-size-label {
+.product-attributes-label {
     flex: 0 0 15%;
     /* width: 42px; */
     font-family: 'Source Sans Pro', sans-serif;
@@ -111,10 +127,11 @@ section:not(.product-description-text) {
     text-transform: uppercase;
 }
 
-.product-size-label:focus,
-.product-size-label:active,
-.product-size-label:hover {
+.product-attributes-label:focus,
+.product-attributes-label:active,
+.product-attributes-label:hover {
     color: #fff;
+    cursor: pointer;
     background-color: #000;
 }
 
