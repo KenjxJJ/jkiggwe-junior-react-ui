@@ -29,8 +29,8 @@ export default class App extends Component {
     return (
       <>
         <Provider store={store}>
+          <NavBarComponent />
           <Router>
-            <NavBarComponent />
             <Routes>
               <Route element={<CategoryComponent />} path="/" />
               <Route element={<ProductComponent />} path=":id" />

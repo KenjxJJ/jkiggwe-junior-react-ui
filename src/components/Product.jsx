@@ -8,23 +8,25 @@ class ProductComponent extends Component {
     super();
     this.state = {
       _product: null,
+      currencyIndex: 0, // Default Currency
       imageLinkToDisplay: null,
+      attribSelected: [{ _id: null, _value: null }],
     };
 
+    this.addToBagHandler = this.addToBagHandler.bind(this);
     this.imageSelectedHandler = this.imageSelectedHandler.bind(this);
   }
 
-  imageSelectedHandler = ( img) => {
+  imageSelectedHandler = (img) => {
     const _img = img;
     this.setState({ imageLinkToDisplay: _img });
   };
-  
-  // TODO - Initialize state for product
+
   async componentDidMount() {
     // Obtain id from the browser
     const id = window.location.pathname.substring(1);
     await this.props.getProductById(id);
-    
+
     // Obtain product info from store
     const product = this.props.product;
     this.setState({ _product: product });
@@ -32,22 +34,82 @@ class ProductComponent extends Component {
     // Set default image
     const defaultImage = this.props.product.gallery[0];
     this.setState({ imageLinkToDisplay: defaultImage });
+
+    // Set default price
+    console.log(this.props._currencyIndex);
+    // this.setState({ currencyIndex: this.props._currencyIndex });
   }
+
+  componentDidUpdate(prevProps) {
+    // On Currency Change
+    if (this.props._currencyIndex !== prevProps._currencyIndex) {
+      this.setState({ currencyIndex: this.props._currencyIndex });
+    }
+  }
+
+  saveAttributeHandler = ({ id, value }) => {
+    //  Iterate through attribute record, and new changes or return null
+    console.log({ id, value });
+
+    // Initiate the first object
+    if (this.state.attribSelected[0]._id === null && id !== null) {
+      this.setState({
+        attribSelected: [
+          {
+            _id: id,
+            _value: value,
+          },
+        ],
+      });
+      return;
+    }
+
+    let selectedAttributes = [...this.state.attribSelected];
+    let newAttributes = [];
+
+    // Search for the match attribute
+    let result = selectedAttributes.find(({ _id, _value }) => _id === id && _value !== value);
+
+    if (result) {
+      // Rename the properties of the attributes
+      result = { _id: id, _value: value };
+      // Search for the unmatching attributes
+      let rest = selectedAttributes.filter((elem) => elem._id !== result._id);
+      // Set final result 
+      if (rest) newAttributes = [result, ...rest];
+      else newAttributes = [result];
+    } else {
+      newAttributes = [...selectedAttributes, { _id: id, _value: value }];
+    }
+
+    // Set attributes to state
+    this.setState({ attribSelected: [...newAttributes] });
+  };
+
+  addToBagHandler = () => {
+    const cart = this.props.bagCollection;
+    console.log("old", cart);
+
+    // Obtain the selectedAttributes
+    const { attribSelected, _product } = this.state;
+    // Obtain product in view
+    const { name, gallery, attributes, brand, description, prices } = _product;
+
+    // Save product
+    const newCart = [
+      ...cart,
+      { name, gallery, brand, description, prices, attributes, attribSelected },
+    ];
+
+    console.log("New Cart", newCart);
+  };
 
   render() {
     const { _product } = this.state;
 
     if (_product !== null) {
-      const {
-        id,
-        name,
-        gallery,
-        attributes,
-        brand,
-        description,
-        prices,
-        category,
-      } = _product;
+      const { name, gallery, attributes, brand, inStock, description, prices } =
+        _product;
 
       return (
         <>
@@ -58,9 +120,8 @@ class ProductComponent extends Component {
                   <>
                     <div
                       className="img-wrapper-two"
-                      onClick={() =>
-                        this.imageSelectedHandler(imgLink)
-                      }
+                      key={imgLink}
+                      onClick={() => this.imageSelectedHandler(imgLink)}
                     >
                       <img src={imgLink} alt="" />
                     </div>
@@ -72,35 +133,52 @@ class ProductComponent extends Component {
             <div className="product-image-large-display">
               <img src={this.state.imageLinkToDisplay} alt="" />
             </div>
-            
+
             <div className="product-description-detail">
               <h1 className="brand">{brand}</h1>
               <h2 className="product-name">{name}</h2>
               <section className="product-attributes">
                 {attributes &&
-                  attributes.map(({ id, type, items }) => {
+                  attributes.map(({ id: attributeID, type, items }, index) => {
                     return (
                       <>
-                        <p>{id}:</p>
-                        <div className="product-info-attributes">
-                          {type !== "swatch" &&
-                            items.map(({ id, value }) => {
-                              return (
-                                <span key={id} className="product-attributes-label">
-                                  {value}
-                                </span>
-                              );
-                            })}
-                          {type === "swatch" &&
-                            items.map(({ id, value }) => {
-                              return (
-                                <span
-                                  key={id}
-                                  className="product-color"
-                                  style={{ backgroundColor: value }}
-                                ></span>
-                              );
-                            })}
+                        <div key={`${attributeID}-${index}`}>
+                          <p>{attributeID}:</p>
+                          <div className="product-info-attributes">
+                            {type !== "swatch" &&
+                              items.map(({ id, value, index }) => {
+                                return (
+                                  <span
+                                    key={`${id}-${index}`}
+                                    onClick={() =>
+                                      this.saveAttributeHandler({
+                                        id: attributeID,
+                                        value,
+                                      })
+                                    }
+                                    className="product-attributes-label"
+                                  >
+                                    {value}
+                                  </span>
+                                );
+                              })}
+                            {type === "swatch" &&
+                              items.map(({ id, value }) => {
+                                return (
+                                  <span
+                                    key={id}
+                                    onClick={() =>
+                                      this.saveAttributeHandler({
+                                        id: attributeID,
+                                        value,
+                                      })
+                                    }
+                                    className="product-color"
+                                    style={{ backgroundColor: value }}
+                                  ></span>
+                                );
+                              })}
+                          </div>
                         </div>
                       </>
                     );
@@ -109,12 +187,21 @@ class ProductComponent extends Component {
               <section className="product-price">
                 <p>Price:</p>
                 <span className="product-price-label">
-                  {prices[0].currency.symbol}
-                  {prices[0].amount}
+                  {prices[this.state.currencyIndex].currency.symbol}
+                  {prices[this.state.currencyIndex].amount}
                 </span>
               </section>
 
-              <div className="add-cart-btn">Add to cart</div>
+              {inStock && (
+                <div className="add-cart-btn-wrapper">
+                  <div
+                    className="add-cart-btn"
+                    onClick={() => this.addToBagHandler()}
+                  >
+                    Add to cart
+                  </div>
+                </div>
+              )}
 
               <section
                 className="product-description-text"
@@ -130,7 +217,10 @@ class ProductComponent extends Component {
   }
 }
 
-const mapStateToProps = (state)=>({
-  product : state.category.product
-})
+const mapStateToProps = (state) => ({
+  product: state.category.product,
+  _currencyIndex: state.category.currencyIndex,
+  bagCollection: state.category.myBag,
+});
+
 export default connect(mapStateToProps, { getProductById })(ProductComponent);

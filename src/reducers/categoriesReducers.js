@@ -1,11 +1,12 @@
-import { GET_CATEGORY_BY_TITLE, GET_CURRENCIES, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
+import { GET_CATEGORY_BY_TITLE, ADD_TO_BAG, GET_CURRENCIES, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
 
 const initialState = {
     category: null,
     currencyIndex: 0,
     names: [],
     currencies: [],
-    product: []
+    product: [],
+    myBag: []
 }
 
 export default function categoriesReducers(state = initialState, action) {
@@ -33,6 +34,11 @@ export default function categoriesReducers(state = initialState, action) {
             return {
                 ...state,
                 product: action.payload
+            }
+        case ADD_TO_BAG:
+            return {
+                ...state,
+                myBag: [...state.myBag, action.payload]
             }
         default:
             return state;
