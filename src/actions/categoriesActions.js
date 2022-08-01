@@ -1,4 +1,4 @@
-import { GET_CATEGORY_BY_TITLE, GET_PRODUCT_BY_ID, ADD_TO_BAG, GET_CURRENCIES, CHANGE_CURRENCY_INDEX, LOAD_CATEGORY, GET_CATEGORY_NAMES } from './types'
+import { GET_CATEGORY_BY_TITLE, VIEW_MY_BAG, GET_PRODUCT_BY_ID, ADD_TO_MY_BAG, GET_CURRENCIES, CHANGE_CURRENCY_INDEX, LOAD_CATEGORY, GET_CATEGORY_NAMES } from './types'
 import { getCategories } from "../queries/CategoriesQuery";
 import { getCategory } from "../queries/CategoryQuery";
 import { getCurrencies } from "../queries/CurrencySwitcherQuery";
@@ -72,6 +72,11 @@ export const getProductById = (id) => {
 
 // Add to Cart(Bag)
 export const addToMyBag = (_item) => ({
-    type: ADD_TO_BAG,
+    type: ADD_TO_MY_BAG,
     payload: _item
+}
+)
+// Add to Cart(Bag)
+export const viewMyBag = () => ({
+    type: VIEW_MY_BAG,
 })

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./Product.css";
 import { connect } from "react-redux";
-import { getProductById } from "../actions/categoriesActions";
+
+import { getProductById, addToMyBag } from "../actions/categoriesActions";
+import { withRouterWrapper } from "../wrapper/WithRouterComponent";
 
 class ProductComponent extends Component {
   constructor() {
@@ -49,7 +51,6 @@ class ProductComponent extends Component {
 
   saveAttributeHandler = ({ id, value }) => {
     //  Iterate through attribute record, and new changes or return null
-    console.log({ id, value });
 
     // Initiate the first object
     if (this.state.attribSelected[0]._id === null && id !== null) {
@@ -68,14 +69,16 @@ class ProductComponent extends Component {
     let newAttributes = [];
 
     // Search for the match attribute
-    let result = selectedAttributes.find(({ _id, _value }) => _id === id && _value !== value);
+    let result = selectedAttributes.find(
+      ({ _id, _value }) => _id === id && _value !== value
+    );
 
     if (result) {
       // Rename the properties of the attributes
       result = { _id: id, _value: value };
       // Search for the unmatching attributes
       let rest = selectedAttributes.filter((elem) => elem._id !== result._id);
-      // Set final result 
+      // Set final result
       if (rest) newAttributes = [result, ...rest];
       else newAttributes = [result];
     } else {
@@ -87,8 +90,8 @@ class ProductComponent extends Component {
   };
 
   addToBagHandler = () => {
+    // Obtain available items in the bag
     const cart = this.props.bagCollection;
-    console.log("old", cart);
 
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
@@ -100,8 +103,10 @@ class ProductComponent extends Component {
       ...cart,
       { name, gallery, brand, description, prices, attributes, attribSelected },
     ];
+    this.props.addToMyBag(newCart);
 
-    console.log("New Cart", newCart);
+    // Return to homepage(Category Page)
+    this.props.navigate("/");
   };
 
   render() {
@@ -196,6 +201,7 @@ class ProductComponent extends Component {
                 <div className="add-cart-btn-wrapper">
                   <div
                     className="add-cart-btn"
+                    href="/"
                     onClick={() => this.addToBagHandler()}
                   >
                     Add to cart
@@ -223,4 +229,6 @@ const mapStateToProps = (state) => ({
   bagCollection: state.category.myBag,
 });
 
-export default connect(mapStateToProps, { getProductById })(ProductComponent);
+export default connect(mapStateToProps, { getProductById, addToMyBag })(
+  withRouterWrapper(ProductComponent)
+);

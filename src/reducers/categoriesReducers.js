@@ -1,4 +1,4 @@
-import { GET_CATEGORY_BY_TITLE, ADD_TO_BAG, GET_CURRENCIES, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
+import { GET_CATEGORY_BY_TITLE, ADD_TO_MY_BAG, VIEW_MY_BAG, GET_CURRENCIES, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
 
 const initialState = {
     category: null,
@@ -35,10 +35,15 @@ export default function categoriesReducers(state = initialState, action) {
                 ...state,
                 product: action.payload
             }
-        case ADD_TO_BAG:
+        case ADD_TO_MY_BAG:
             return {
                 ...state,
                 myBag: [...state.myBag, action.payload]
+            }
+        case VIEW_MY_BAG:
+            return {
+                ...state,
+                myBag: [...state.myBag]
             }
         default:
             return state;
