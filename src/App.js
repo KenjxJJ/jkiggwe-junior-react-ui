@@ -12,6 +12,11 @@ import allReducers from "./reducers";
 import logger from "redux-logger";
 import thunk from 'redux-thunk';
 
+// Redux Persist
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage';
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 export default class App extends Component {
 
@@ -24,19 +29,30 @@ export default class App extends Component {
       middlewareList = [thunk];
     }
 
-    let store = createStore(allReducers, applyMiddleware(...middlewareList));
+    // Config for redux-persist
+    const persistConfig = {
+      key: 'root1', storage,
+    }
+
+    const persistedReducer = persistReducer(persistConfig, allReducers)
+
+    let store = createStore(persistedReducer, applyMiddleware(...middlewareList));
+
+    let persistor = persistStore(store)
 
     return (
       <>
         <Provider store={store}>
-          <Router>
-          <NavBarComponent />
-            <Routes>
-              <Route element={<CategoryComponent />} path="/" />
-              <Route element={<ProductComponent />} path=":id" />
-              <Route element={<CartComponent />} path="/order" />
-            </Routes>
-          </Router>
+          <PersistGate loading={null} persistor={persistor}>
+            <Router>
+              <NavBarComponent />
+              <Routes>
+                <Route element={<CategoryComponent />} path="/" />
+                <Route element={<ProductComponent />} path=":id" />
+                <Route element={<CartComponent />} path="/order" />
+              </Routes>
+            </Router>
+          </PersistGate>
         </Provider>
       </>
     )

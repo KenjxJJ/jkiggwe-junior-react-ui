@@ -15,7 +15,7 @@ class CartOverlayComponent extends Component {
       imagePosition: 0,
       total_price: 0,
       quantities: [
-        { id: 0, numberOfItems: 1 },
+        { id: 0, numberOfItems: 1 },   // TODO - start with one, if more than one item create more similar objects..{num : 1}
         { id: 1, numberOfItems: 2 },
         { id: 2, numberOfItems: 4 },
       ],
@@ -94,7 +94,7 @@ class CartOverlayComponent extends Component {
   };
 
   componentDidMount() {
-    const [bagItems] = this.props.myBag;
+    const bagItems = this.props.myBag;
     // Set bag items, and size
     this.setState({ bagItems: bagItems });
     if (bagItems) {
@@ -178,8 +178,8 @@ class CartOverlayComponent extends Component {
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute-color cart-overlay-size-label product-attributes-label"
-                                              : "cart-overlay-size-label product-attributes-label"
+                                              ? "selected-attribute-color cart-overlay-color product-color"
+                                              : "cart-overlay-color product-color"
                                           }
                                         ></span>
                                       );

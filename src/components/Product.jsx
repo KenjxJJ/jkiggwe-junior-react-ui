@@ -90,21 +90,21 @@ class ProductComponent extends Component {
   };
 
   addToBagHandler = () => {
-    // Obtain available items in the bag
-    const cart = this.props.bagCollection;
-    console.log("old", cart);
-
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
     // Obtain product in view
     const { name, gallery, attributes, brand, description, prices } = _product;
 
     // Save product
-    const newCart = [
-      ...cart,
-      { name, gallery, brand, description, prices, attributes, attribSelected },
-    ];
-
+    const newCart = {
+      name,
+      gallery,
+      brand,
+      description,
+      prices,
+      attributes,
+      attribSelected,
+    };
     console.log("New", newCart);
     this.props.addToMyBag(newCart);
 
