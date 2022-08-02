@@ -76,7 +76,7 @@ class ProductComponent extends Component {
     if (result) {
       // Rename the properties of the attributes
       result = { _id: id, _value: value };
-      // Search for the unmatching attributes
+      // Search for the unmatched attributes
       let rest = selectedAttributes.filter((elem) => elem._id !== result._id);
       // Set final result
       if (rest) newAttributes = [result, ...rest];
@@ -92,6 +92,7 @@ class ProductComponent extends Component {
   addToBagHandler = () => {
     // Obtain available items in the bag
     const cart = this.props.bagCollection;
+    console.log("old", cart);
 
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
@@ -103,6 +104,8 @@ class ProductComponent extends Component {
       ...cart,
       { name, gallery, brand, description, prices, attributes, attribSelected },
     ];
+
+    console.log("New", newCart);
     this.props.addToMyBag(newCart);
 
     // Return to homepage(Category Page)

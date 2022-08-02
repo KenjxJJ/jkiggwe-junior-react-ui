@@ -20,12 +20,13 @@ class NavBarComponent extends Component {
       showBag: false,
       displayCurrencySwitcher: false,
       currencySymbol: "$",
-      inverted : false,
+      inverted: false,
       categoryNames: [{ title: "all" }],
     };
 
     this.showCurrencySwitcher = this.showCurrencySwitcher.bind(this);
     this.showMyBag = this.showMyBag.bind(this);
+    this.closeBagHandler = this.closeBagHandler.bind(this);
     this.selectCategoryName = this.selectCategoryName.bind(this);
     this.closeOverlayHandler = this.closeOverlayHandler.bind(this);
   }
@@ -35,22 +36,25 @@ class NavBarComponent extends Component {
       displayCurrencySwitcher: !this.state.displayCurrencySwitcher,
     });
     // Animated opening and closing
-    this.setState({inverted : !this.state.inverted})
+    this.setState({ inverted: !this.state.inverted });
   };
 
   // Display the Cart Overlay
   showMyBag = () => {
-    this.setState({ showBag: !this.state.showBag });
+    this.setState({ showBag: true });
   };
 
   // Close the Cart Overlay
   closeOverlayHandler = () => {
     this.setState({ showBag: false });
   };
-
+  
+  closeBagHandler = (e) => {;
+    this.setState({ showBag: !this.state.showBag });
+    e.stopPropagation();
+  };
 
   componentDidUpdate(prevProps) {
-
     // Obtain the currency selected using currency index location in currencies
     if (this.props.currencyIndex !== prevProps.currencyIndex) {
       const currencyIndex = this.props.currencyIndex;
@@ -113,7 +117,7 @@ class NavBarComponent extends Component {
               <span
                 name="currency-switcher"
                 id="currency-switcher"
-                className={ this.state.inverted ? 'inverted' : ""}
+                className={this.state.inverted ? "inverted" : ""}
                 onClick={this.showCurrencySwitcher}
               >
                 {this.state.currencySymbol}
@@ -126,16 +130,18 @@ class NavBarComponent extends Component {
                 <span id="cart-number-icon">3</span>
                 <img className="cart-icon" src={cartIcon} alt="cart-icon" />
                 {/* Cart Overlay */}
-                {this.state.showBag === true && <CartOverlayComponent />}
+                {this.state.showBag === true && (
+                  <CartOverlayComponent clicked={this.closeBagHandler} />
+                )}
               </span>
-
-              {/* Overlay Backdrop */}
               {this.state.showBag === true && (
                 <BackdropComponent
                   show={this.state.showBag}
                   clicked={this.closeOverlayHandler}
                 />
               )}
+
+              {/* Overlay Backdrop */}
             </div>
           </header>
         </nav>

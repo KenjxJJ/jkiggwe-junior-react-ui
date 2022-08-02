@@ -46,10 +46,10 @@ class CategoryComponent extends Component {
             <div className="items-wrapper">
               {products &&
                 products.map(
-                  ({ id, name, brand, prices, inStock, gallery }) => {
+                  ({ id, name, brand, prices, inStock, gallery }, index) => {
                     return (
                       <>
-                        <section className="item" key={id}>
+                        <section className="item" key={`${id}- ${index}`}>
                           <div
                             className={
                               !inStock
