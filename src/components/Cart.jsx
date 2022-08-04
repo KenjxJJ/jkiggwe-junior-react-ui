@@ -1,129 +1,294 @@
 import React, { Component } from "react";
 import "./Product.css";
 import "./Cart.css";
-import productD from "../assets/Product D.jpg";
+
+import { withRouterWrapper } from "../wrapper/WithRouterComponent";
+import { connect } from "react-redux";
 
 class CartComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      bagSize: 0,
+      currencyIndex: 0,
+      bagItems: [],
+      imagePosition: 0,
+      total_price: 0,
+      quantities: [
+        { id: 0, numberOfItems: 1 }, // TODO - start with one, if more than one item create more similar objects..{num : 1}
+      ],
+    };
+
+    this.changeQuantity = this.changeQuantity.bind(this);
+    this.changeTotalPrice = this.changeTotalPrice.bind(this);
+    this.showImageDisplay = this.showImageDisplay.bind(this);
+  }
+
+  // Show another image, by updating its index(value-location)
+  showImageDisplay = ({ operation }) => {
+    // show previous image-step backwards
+    if (operation === "previous") {
+      if (this.state.imagePosition !== 0)
+        this.setState({ imagePosition: this.state.imagePosition - 1 });
+    }
+    //show next image forward
+    if (operation === "next") {
+      // Obtain the largest index of the gallery image
+      const largest = this.state.bagItems[0].gallery.length;
+      if (this.state.imagePosition < largest - 1)
+        this.setState({ imagePosition: this.state.imagePosition + 1 });
+    }
+  };
+
+  // Change the value of quantities by addition or subtraction
+  changeQuantity = ({ operation, index }) => {
+    if (operation === "addition") {
+      // Search and replace number of items based on indexed location of the product
+      let _quantities = this.state.quantities.map((quantityItem) => {
+        let { id, numberOfItems } = quantityItem;
+        if (id === index) return { id, numberOfItems: (numberOfItems += 1) };
+        return quantityItem;
+      });
+      this.setState(
+        {
+          quantities: _quantities,
+        },
+        () => this.changeTotalPrice()
+      );
+    }
+
+    if (operation === "subtraction") {
+      // Search and replace number of items based on indexed location of the product
+      let _quantities = this.state.quantities.map((quantityItem) => {
+        let { id, numberOfItems } = quantityItem;
+        if (id === index)
+          return {
+            id,
+            numberOfItems: numberOfItems > 1 ? (numberOfItems -= 1) : 1,
+          };
+        return quantityItem;
+      });
+      this.setState(
+        {
+          quantities: _quantities,
+        },
+        () => this.changeTotalPrice()
+      );
+    }
+    // TODO - You can remove by minus to zero(quantity)
+  };
+
+  changeTotalPrice = () => {
+    let { quantities, currencyIndex: currIndex, bagItems } = this.state;
+
+    let newPrice = 0;
+    // TODO- Note the different quantities of different items
+    bagItems.forEach((curr, index) => {
+      newPrice +=
+        curr.prices[currIndex].amount * quantities[index].numberOfItems;
+    });
+
+    this.setState({ total_price: newPrice.toFixed(2) });
+  };
+
+  componentDidMount() {
+    const bagItems = this.props.myBag;
+    // Set bag items, and size
+    this.setState({ bagItems: bagItems });
+    if (bagItems) {
+      this.setState({ bagSize: bagItems.length }, () =>
+        this.changeTotalPrice()
+      );
+    }
+  }
 
   render() {
-    const style1 = "Blue";
+    const {
+      bagSize,
+      bagItems,
+      quantities,
+      currencyIndex,
+      total_price,
+      imagePosition,
+    } = this.state;
 
     return (
       <>
-        <main className="cart-details">
-          <h1>Cart</h1>
+        {bagSize !== 0 && (
+          <main className="cart-details">
+            <h1>Cart</h1>
 
-          <div className="cart-items">
-            <div className="cart-item">
-              <section className="cart-detail-item product-description-detail">
-                <h1 className="brand">Apollo</h1>
-                <h2 className="product-name">Running Short</h2>
-                <p className="product-price-label">$50.00</p>
+            <div className="cart-items">
+              {bagItems.map(
+                (
+                  { brand, name, attributes, attribSelected, gallery, prices },
+                  index
+                ) => (
+                  <>
+                    <div className="cart-item">
+                      <section className="cart-detail-item product-description-detail">
+                        <h1 className="brand">{brand}</h1>
+                        <h2 className="product-name">{name}</h2>
+                        <p className="product-price-label">
+                          {prices[currencyIndex].currency.symbol}
+                          {prices[currencyIndex].amount}{" "}
+                        </p>
 
-                <section className="product-size">
-                  <p>Size:</p>
-                  <div className="product-size-attributes">
-                    <span className="product-size-label">XS</span>
-                    <span className="product-size-label">S</span>
-                    <span className="product-size-label">M</span>
-                    <span className="product-size-label">L</span>
-                  </div>
-                </section>
-                <section className="product-color-attributes">
-                  <p>Color:</p>
-                  <div className="product-color-selection">
-                    <span className="product-color"></span>
-                    {/* Use inbuilt styling */}
-                    <span
-                      className="product-color"
-                      style={{ backgroundColor: style1 }}
-                    ></span>
-                    <span className="product-color"></span>
-                  </div>
-                </section>
-              </section>
+                        <section className="product-size">
+                          {attributes &&
+                            attributes.map(({ id, type, items }) => (
+                              <>
+                                <p>{id}:</p>
+                                <div className="cart-overlay-size product-info-attributes">
+                                  {type !== "swatch" &&
+                                    items.map(({ id, value, index }) => {
+                                      const selectedAttrib =
+                                        attribSelected.find(
+                                          (attr) => attr._value === value
+                                        );
+                                      return (
+                                        <span
+                                          key={`${id}-${index}`}
+                                          className={
+                                            selectedAttrib
+                                              ? "selected-attribute cart-overlay-size-label product-attributes-label"
+                                              : "cart-overlay-size-label product-attributes-label"
+                                          }
+                                        >
+                                          {value}
+                                        </span>
+                                      );
+                                    })}
+                                  {type === "swatch" &&
+                                    items.map(({ id, value }) => {
+                                      const selectedAttrib =
+                                        attribSelected.find(
+                                          (attr) => attr._value === value
+                                        );
+                                      return (
+                                        <span
+                                          key={id}
+                                          style={{ backgroundColor: value }}
+                                          className={
+                                            selectedAttrib
+                                              ? "selected-attribute-color cart-overlay-color product-color"
+                                              : "cart-overlay-color product-color"
+                                          }
+                                        ></span>
+                                      );
+                                    })}
+                                </div>
+                              </>
+                            ))}
+                        </section>
 
-              <div className="image-quantity-section">
-                <div className="quantifiers">
-                  <span className="add-button"> + </span>
-                  <span className="quantity-value">1</span>
-                  <span className="subtract-button"> - </span>
-                </div>
-                <div className="image-wrapper">
-                  <img src={productD} alt="" />
-                  <div className="arrows">
-                    <span className="left-arrow"></span>
-                    <span className="right-arrow"></span>
-                  </div>
-                </div>
-              </div>
+                        {/* END CART_DETAILS */}
+                      </section>
+
+                      <div className="image-quantity-section">
+                        <div className="quantifiers">
+                          <span
+                            className="add-button"
+                            onClick={() =>
+                              this.changeQuantity({
+                                operation: "addition",
+                                index: index,
+                              })
+                            }
+                          >
+                            {" "}
+                            +{" "}
+                          </span>
+                          <span className="quantity-value">
+                            {quantities[index].numberOfItems}
+                          </span>
+                          <span
+                            className="subtract-button"
+                            onClick={() =>
+                              this.changeQuantity({
+                                operation: "subtraction",
+                                index: index,
+                              })
+                            }
+                          >
+                            {" "}
+                            -{" "}
+                          </span>
+                        </div>
+                        <div className="image-wrapper">
+                          <img src={gallery[imagePosition]} alt="" />
+                          <div className="arrows">
+                            <span
+                              onClick={() =>
+                                this.showImageDisplay({
+                                  operation: "previous",
+                                })
+                              }
+                            >
+                              {"<"}
+                            </span>
+                            <span
+                              onClick={() =>
+                                this.showImageDisplay({
+                                  operation: "next",
+                                })
+                              }
+                            >
+                              {">"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )
+              )}
             </div>
-            <div className="cart-item">
-              <section className="cart-detail-item product-description-detail">
-                <h1 className="brand">Apollo</h1>
-                <h2 className="product-name">Running Short</h2>
-                <p className="product-price-label">$50.00</p>
-
-                <section className="product-size">
-                  <p>Size:</p>
-                  <div className="product-size-attributes">
-                    <span className="product-size-label">XS</span>
-                    <span className="product-size-label">S</span>
-                    <span className="product-size-label">M</span>
-                    <span className="product-size-label">L</span>
-                  </div>
-                </section>
-                <section className="product-color-attributes">
-                  <p>Color:</p>
-                  <div className="product-color-selection">
-                    <span className="product-color"></span>
-                    {/* Use inbuilt styling */}
-                    <span
-                      className="product-color"
-                      style={{ backgroundColor: style1 }}
-                    ></span>
-                    <span className="product-color"></span>
-                  </div>
-                </section>
-              </section>
-
-              <div className="image-quantity-section">
-                <div className="quantifiers">
-                  <span className="add-button"> + </span>
-                  <span className="quantity-value">1</span>
-                  <span className="subtract-button"> - </span>
-                </div>
-                <div className="image-wrapper">
-                  <img src={productD} alt="" />
-                  <div className="arrows">
-                    <span className="left-arrow"></span>
-                    <span className="right-arrow"></span>
-                  </div>
-                </div>
-              </div>
+            <div className="order-details">
+              <p className="tax">
+                <span>Tax 21%: </span>
+                <span>
+                  {bagItems[0].prices[currencyIndex].currency.symbol}
+                  {(0.21 * total_price).toFixed(2)}
+                </span>
+              </p>
+              <p className="cart-quantity">
+                <span>Quantity:</span>
+                <span>{bagSize}</span>
+              </p>
+              <p className="cart-total-price">
+                <span>Total: </span>
+                <span>
+                  {bagItems[0].prices[currencyIndex].currency.symbol}
+                  {total_price}
+                </span>
+              </p>
+              <button
+                className="order-btn"
+                onClick={() => {
+                  this.props.navigate("/");
+                }}
+              >
+                Order
+              </button>
             </div>
-          </div>
-
-          <div className="order-details">
-            <p className="tax">
-              {" "}
-              <span>Tax 21%: </span>
-              <span>$42.00</span>
-            </p>
-            <p className="cart-quantity">
-              <span>Quantity:</span>
-              <span>3</span>
-            </p>
-            <p className="cart-total-price">
-              <span>Total: </span>
-              <span>$200.00</span>
-            </p>
-            <button className="order-btn">Order</button>
-          </div>
-        </main>
+          </main>
+        )}
+        {bagSize === 0 && (
+          <>
+            <main className="cart-details">
+              <h2>Bag Empty!</h2>
+              <p onClick={this.props.navigate("/")}>See Categories</p>
+            </main>
+          </>
+        )}
       </>
     );
   }
 }
+const mapStateToProps = (state) => ({
+  _currencyIndex: state.category.currencyIndex,
+  myBag: state.category.myBag,
+});
 
-export default CartComponent;
+export default connect(mapStateToProps, null)(withRouterWrapper(CartComponent));

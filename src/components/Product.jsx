@@ -87,6 +87,9 @@ class ProductComponent extends Component {
 
     // Set attributes to state
     this.setState({ attribSelected: [...newAttributes] });
+
+    // if(selectedAttrib)
+    // document.querySelector("span.product-attributes-label").classList.toggle("selected-attribute")
   };
 
   addToBagHandler = () => {
@@ -105,7 +108,7 @@ class ProductComponent extends Component {
       attributes,
       attribSelected,
     };
-    console.log("New", newCart);
+    // add to cart
     this.props.addToMyBag(newCart);
 
     // Return to homepage(Category Page)
@@ -155,16 +158,23 @@ class ProductComponent extends Component {
                           <div className="product-info-attributes">
                             {type !== "swatch" &&
                               items.map(({ id, value, index }) => {
+                                let sele = this.state.attribSelected.find(
+                                  (item) => item._id === id
+                                );
                                 return (
                                   <span
                                     key={`${id}-${index}`}
-                                    onClick={() =>
+                                    onClick={() => {
                                       this.saveAttributeHandler({
                                         id: attributeID,
                                         value,
                                       })
+                                    }}
+                                    className={
+                                      sele
+                                        ? "selected-attribute product-attributes-label"
+                                        : "product-attributes-label"
                                     }
-                                    className="product-attributes-label"
                                   >
                                     {value}
                                   </span>
@@ -172,6 +182,10 @@ class ProductComponent extends Component {
                               })}
                             {type === "swatch" &&
                               items.map(({ id, value }) => {
+                                let sele = this.state.attribSelected.find(
+                                  (item) => item._id === id
+                                );
+
                                 return (
                                   <span
                                     key={id}
@@ -181,7 +195,11 @@ class ProductComponent extends Component {
                                         value,
                                       })
                                     }
-                                    className="product-color"
+                                    className={
+                                      sele
+                                        ? "selected-attribute-color product-color"
+                                        : "product-color"
+                                    }
                                     style={{ backgroundColor: value }}
                                   ></span>
                                 );

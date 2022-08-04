@@ -91,17 +91,9 @@
     margin-right: 0.1rem !important;
 }
 
-/* Selected attribute */
-.selected-attribute{
-    background-color: #000000;
-    color: #fff;
-}
-
-.selected-attribute-color{
-    outline: 2px solid #5ECE7B;
-}
 
 
+/* Image View Section */
 
 .image-quantity-section {
     flex: 0 0 55% !important;

@@ -210,3 +210,13 @@ section:not(.product-description-text) {
     font-size: 16px;
     line-height: 159.96%;
 }
+
+/* Selected attribute */
+.selected-attribute{
+    background-color: #000000;
+    color: #fff;
+}
+
+.selected-attribute-color{
+    outline: 2px solid #5ECE7B;
+}
