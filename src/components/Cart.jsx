@@ -15,8 +15,7 @@ class CartComponent extends Component {
       imagePosition: 0,
       total_price: 0,
       quantities: [
-        { id: 0, numberOfItems: 1 }, // TODO - start with one, if more than one item create more similar objects..{num : 1}
-      ],
+        { id: 0, numberOfItems: 1 },],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
@@ -99,6 +98,19 @@ class CartComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
+      
+      let count = bagItems.length;
+      let idNumber = 1;
+      let newQuantitiesArray = [];
+
+      while (count > 1) {
+        newQuantitiesArray.push({ id: idNumber, numberOfItems: 1 });
+        idNumber++;
+        count--;
+      }
+      this.setState({
+        quantities: [...this.state.quantities, ...newQuantitiesArray],
+      });
     }
   }
 
