@@ -98,7 +98,6 @@ class NavBarComponent extends Component {
               {this.state.categoryNames.map(({ title }) => {
                 return (
                   <a
-                    href="#"
                     className={className}
                     key={title}
                     onClick={() => {
