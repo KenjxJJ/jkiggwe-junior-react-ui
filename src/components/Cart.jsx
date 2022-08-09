@@ -14,8 +14,7 @@ class CartComponent extends Component {
       bagItems: [],
       imagePosition: 0,
       total_price: 0,
-      quantities: [
-        { id: 0, numberOfItems: 1 },],
+      quantities: [{ id: 0, numberOfItems: 1 }],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
@@ -87,7 +86,10 @@ class CartComponent extends Component {
         curr.prices[currIndex].amount * quantities[index].numberOfItems;
     });
 
-    this.setState({ total_price: newPrice.toFixed(2) });
+    // Add Tax to final price
+    let newPriceFinal = 0.21 * newPrice + newPrice;
+
+    this.setState({ total_price: newPriceFinal.toFixed(2) });
   };
 
   componentDidMount() {
@@ -98,7 +100,7 @@ class CartComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
-      
+
       let count = bagItems.length;
       let idNumber = 1;
       let newQuantitiesArray = [];

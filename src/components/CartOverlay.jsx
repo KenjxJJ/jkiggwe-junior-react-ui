@@ -15,7 +15,7 @@ class CartOverlayComponent extends Component {
       imagePosition: 0,
       total_price: 0,
       quantities: [
-        { id: 0, numberOfItems: 1 },   // TODO - start with one, if more than one item create more similar objects..{num : 1}
+        { id: 0, numberOfItems: 1 }, // TODO - start with one, if more than one item create more similar objects..{num : 1}
         { id: 1, numberOfItems: 2 },
         { id: 2, numberOfItems: 4 },
       ],
@@ -89,8 +89,10 @@ class CartOverlayComponent extends Component {
       newPrice +=
         curr.prices[currIndex].amount * quantities[index].numberOfItems;
     });
+    // Add Tax to final price
+    let newPriceFinal = 0.21 * newPrice + newPrice;
 
-    this.setState({ total_price: newPrice.toFixed(2) });
+    this.setState({ total_price: newPriceFinal.toFixed(2) });
   };
 
   componentDidMount() {
