@@ -106,6 +106,14 @@ class CartOverlayComponent extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props._currencyIndex !== prevProps._currencyIndex) {
+    this.setState({ currencyIndex: this.props._currencyIndex }, ()=>{
+       this.changeTotalPrice()
+    });
+  }
+}
+
   render() {
     const {
       bagSize,

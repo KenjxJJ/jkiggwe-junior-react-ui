@@ -87,7 +87,7 @@ class CartComponent extends Component {
 
     let newPrice = 0;
     let allItemsSize = 0;
-    
+
     bagItems.forEach((curr, index) => {
       newPrice +=
         curr.prices[currIndex].amount * quantities[index].numberOfItems;
@@ -126,6 +126,15 @@ class CartComponent extends Component {
       });
     }
   }
+
+  componentDidUpdate(prevProps) {
+      if (this.props._currencyIndex !== prevProps._currencyIndex) {
+      this.setState({ currencyIndex: this.props._currencyIndex }, ()=>{
+         this.changeTotalPrice()
+      });
+    }
+  }
+
 
   render() {
     const {
