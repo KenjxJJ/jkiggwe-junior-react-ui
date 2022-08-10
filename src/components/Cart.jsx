@@ -81,8 +81,7 @@ class CartComponent extends Component {
     let {
       quantities,
       currencyIndex: currIndex,
-      bagItems,
-      bagSize,
+      bagItems
     } = this.state;
 
     let newPrice = 0;
@@ -112,6 +111,7 @@ class CartComponent extends Component {
         this.changeTotalPrice()
       );
 
+      // set quantities array for more than one item
       let count = bagItems.length;
       let idNumber = 1;
       let newQuantitiesArray = [];

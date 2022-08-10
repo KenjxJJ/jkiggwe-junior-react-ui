@@ -14,11 +14,7 @@ class CartOverlayComponent extends Component {
       bagItems: [],
       imagePosition: 0,
       total_price: 0,
-      quantities: [
-        { id: 0, numberOfItems: 1 }, // TODO - start with one, if more than one item create more similar objects..{num : 1}
-        { id: 1, numberOfItems: 2 },
-        { id: 2, numberOfItems: 4 },
-      ],
+      quantities: [{ id: 0, numberOfItems: 1 }],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
@@ -103,16 +99,30 @@ class CartOverlayComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
+
+      // set quantities array for more than one item
+      let count = bagItems.length;
+      let idNumber = 1;
+      let newQuantitiesArray = [];
+
+      while (count > 1) {
+        newQuantitiesArray.push({ id: idNumber, numberOfItems: 1 });
+        idNumber++;
+        count--;
+      }
+      this.setState({
+        quantities: [...this.state.quantities, ...newQuantitiesArray],
+      });
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props._currencyIndex !== prevProps._currencyIndex) {
-    this.setState({ currencyIndex: this.props._currencyIndex }, ()=>{
-       this.changeTotalPrice()
-    });
+      this.setState({ currencyIndex: this.props._currencyIndex }, () => {
+        this.changeTotalPrice();
+      });
+    }
   }
-}
 
   render() {
     const {
