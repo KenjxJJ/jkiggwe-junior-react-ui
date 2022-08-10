@@ -125,14 +125,13 @@ section:not(.product-description-text) {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
-/* .product-attributes-label:focus, */
-.product-attributes-label:active
-/* .product-attributes-label:hover  */
+.product-attributes-label:focus,
+.product-attributes-label:hover 
 {
     color: #fff;
-    cursor: pointer;
     background-color: #000;
 }
 
@@ -164,9 +163,7 @@ section:not(.product-description-text) {
 }
 
 .product-color:focus,
-.product-color:active,
 .product-color:hover {
-    /* opacity: 0.8; */
     outline: 1px solid rgba(94, 206, 123, 1);
 }
 

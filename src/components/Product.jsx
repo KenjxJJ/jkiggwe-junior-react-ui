@@ -159,7 +159,7 @@ class ProductComponent extends Component {
                             {type !== "swatch" &&
                               items.map(({ id, value, index }) => {
                                 let selected = this.state.attribSelected.find(
-                                  (item) => item._value === value
+                                  (item) => item._value === value && item._id === attributeID
                                 );
                                 return (
                                   <span
