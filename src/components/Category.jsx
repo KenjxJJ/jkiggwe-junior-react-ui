@@ -49,7 +49,7 @@ class CategoryComponent extends Component {
                   ({ id, name, brand, prices, inStock, gallery }, index) => {
                     return (
                       <>
-                        <section className="item" key={`${id}- ${index}`}>
+                        <section className="item" key={`${id}-${index}`}>
                           <div
                             className={
                               !inStock

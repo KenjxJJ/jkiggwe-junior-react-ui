@@ -127,9 +127,10 @@ section:not(.product-description-text) {
     text-transform: uppercase;
 }
 
-.product-attributes-label:focus,
-.product-attributes-label:active,
-.product-attributes-label:hover {
+/* .product-attributes-label:focus, */
+.product-attributes-label:active
+/* .product-attributes-label:hover  */
+{
     color: #fff;
     cursor: pointer;
     background-color: #000;
@@ -213,10 +214,10 @@ section:not(.product-description-text) {
 
 /* Selected attribute */
 .selected-attribute{
-    background-color: #000000;
-    color: #fff;
+    background-color: #000000 !important;
+    color: #fff !important;
 }
 
 .selected-attribute-color{
-    outline: 2px solid #5ECE7B;
+    outline: 2px solid #5ECE7B !important;
 }

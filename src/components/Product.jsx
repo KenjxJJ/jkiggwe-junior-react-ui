@@ -158,8 +158,8 @@ class ProductComponent extends Component {
                           <div className="product-info-attributes">
                             {type !== "swatch" &&
                               items.map(({ id, value, index }) => {
-                                let sele = this.state.attribSelected.find(
-                                  (item) => item._id === id
+                                let selected = this.state.attribSelected.find(
+                                  (item) => item._value === value
                                 );
                                 return (
                                   <span
@@ -171,7 +171,7 @@ class ProductComponent extends Component {
                                       })
                                     }}
                                     className={
-                                      sele
+                                      selected
                                         ? "selected-attribute product-attributes-label"
                                         : "product-attributes-label"
                                     }
@@ -181,14 +181,14 @@ class ProductComponent extends Component {
                                 );
                               })}
                             {type === "swatch" &&
-                              items.map(({ id, value }) => {
-                                let sele = this.state.attribSelected.find(
-                                  (item) => item._id === id
+                              items.map(({ id, value }, index) => {
+                                let selected = this.state.attribSelected.find(
+                                  (item) => item._value === value
                                 );
 
                                 return (
                                   <span
-                                    key={id}
+                                  key={`${id}-${index}`}
                                     onClick={() =>
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -196,7 +196,7 @@ class ProductComponent extends Component {
                                       })
                                     }
                                     className={
-                                      sele
+                                      selected
                                         ? "selected-attribute-color product-color"
                                         : "product-color"
                                     }
