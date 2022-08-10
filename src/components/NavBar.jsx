@@ -48,8 +48,8 @@ class NavBarComponent extends Component {
   closeOverlayHandler = () => {
     this.setState({ showBag: false });
   };
-  
-  closeBagHandler = (e) => {;
+
+  closeBagHandler = (e) => {
     this.setState({ showBag: !this.state.showBag });
     e.stopPropagation();
   };
@@ -61,6 +61,7 @@ class NavBarComponent extends Component {
       const [currencies] = this.props.currencies;
       const { symbol } = currencies.find((curr, index) => {
         if (index === currencyIndex) return curr;
+        return curr;
       });
       this.setState({ currencySymbol: symbol });
     }
@@ -97,7 +98,7 @@ class NavBarComponent extends Component {
             <div className="category-name">
               {this.state.categoryNames.map(({ title }) => {
                 return (
-                  <a
+                  <span
                     className={className}
                     key={title}
                     onClick={() => {
@@ -105,7 +106,7 @@ class NavBarComponent extends Component {
                     }}
                   >
                     {title}
-                  </a>
+                  </span>
                 );
               })}
             </div>
