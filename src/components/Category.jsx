@@ -50,6 +50,7 @@ class CategoryComponent extends Component {
                     return (
                       <>
                         <section className="item" key={`${id}-${index}`}>
+                          <a href={id}>
                           <div
                             className={
                               !inStock
@@ -64,7 +65,6 @@ class CategoryComponent extends Component {
                               alt=""
                             />
                           </div>
-                          <a href={id}>
                             <h2 className="title">
                               {brand} {name}
                             </h2>
