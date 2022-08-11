@@ -20,6 +20,7 @@ class NavBarComponent extends Component {
       showBag: false,
       displayCurrencySwitcher: false,
       currencySymbol: "$",
+      bagSize: 0,
       inverted: false,
       categoryNames: [{ title: "all" }],
     };
@@ -65,6 +66,10 @@ class NavBarComponent extends Component {
       });
       this.setState({ currencySymbol: symbol });
     }
+
+    if (this.props.bagSize !== prevProps.bagSize) {
+      this.setState({ bagSize: this.props.bagSize });
+    }
   }
 
   // Select Category by name(title)
@@ -83,9 +88,14 @@ class NavBarComponent extends Component {
     // Obtain the first result's title
     let title = this.props.names[0];
     this.selectCategoryName(title.title);
+
+    // Set bag size
+    this.setState({ bagSize: this.props.bagSize });
   }
 
   render() {
+    let { inverted, bagSize, showBag, displayCurrencySwitcher, currencySymbol, categoryNames } = this.state;
+
     let className = "nav-link-active";
     if (this.props.isActive) {
       className += "nav-link-active";
@@ -96,7 +106,7 @@ class NavBarComponent extends Component {
         <nav>
           <header className="navigation">
             <div className="category-name">
-              {this.state.categoryNames.map(({ title }) => {
+              {categoryNames.map(({ title }) => {
                 return (
                   <span
                     className={className}
@@ -117,26 +127,26 @@ class NavBarComponent extends Component {
               <span
                 name="currency-switcher"
                 id="currency-switcher"
-                className={this.state.inverted ? "inverted" : ""}
+                className={inverted ? "inverted" : ""}
                 onClick={this.showCurrencySwitcher}
               >
-                {this.state.currencySymbol}
-                {this.state.displayCurrencySwitcher === true && (
+                {currencySymbol}
+                {displayCurrencySwitcher === true && (
                   <CurrencySwitcherComponent />
                 )}
               </span>
 
               <span id="cart-btn" onClick={this.showMyBag}>
-                <span id="cart-number-icon">3</span>
+                <span id="cart-number-icon">{bagSize}</span>
                 <img className="cart-icon" src={cartIcon} alt="cart-icon" />
                 {/* Cart Overlay */}
-                {this.state.showBag === true && (
+                {showBag === true && (
                   <CartOverlayComponent clicked={this.closeBagHandler} />
                 )}
               </span>
-              {this.state.showBag === true && (
+              {showBag === true && (
                 <BackdropComponent
-                  show={this.state.showBag}
+                  show={showBag}
                   clicked={this.closeOverlayHandler}
                 />
               )}
@@ -156,6 +166,7 @@ const mapStateToProps = (state) => ({
   category: state.category.category,
   currencyIndex: state.category.currencyIndex,
   currencies: state.category.currencies,
+  bagSize: state.category.myBag.length,
 });
 
 export default connect(mapStateToProps, {
