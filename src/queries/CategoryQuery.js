@@ -1,7 +1,7 @@
 import { client, Query, Field } from '@tilework/opus';
 
 export const getCategory = async (item) => {
-    client.setEndpoint("http://localhost:4000/");
+    client.setEndpoint("https://jazzy-chimera-ebc7e8.netlify.app/");
     return await client.post(categoryQuery(item));
 }
 

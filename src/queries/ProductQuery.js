@@ -2,7 +2,7 @@ import { client, Field, Query } from '@tilework/opus';
 
 
 export const getProduct = async (product_id) => {
-    client.setEndpoint("http://localhost:4000/");
+    client.setEndpoint("https://jazzy-chimera-ebc7e8.netlify.app/");
     return await client.post(productQuery(product_id));
 }
 
