@@ -60,10 +60,10 @@ class NavBarComponent extends Component {
     if (this.props.currencyIndex !== prevProps.currencyIndex) {
       const currencyIndex = this.props.currencyIndex;
       const [currencies] = this.props.currencies;
-      const { symbol } = currencies.find((curr, index) => {
-        if (index === currencyIndex) return curr;
-        return curr;
-      });
+
+      const { symbol } = currencies.find(
+        (_curr, index) => index === currencyIndex
+      );
       this.setState({ currencySymbol: symbol });
     }
 
@@ -94,7 +94,14 @@ class NavBarComponent extends Component {
   }
 
   render() {
-    let { inverted, bagSize, showBag, displayCurrencySwitcher, currencySymbol, categoryNames } = this.state;
+    let {
+      inverted,
+      bagSize,
+      showBag,
+      displayCurrencySwitcher,
+      currencySymbol,
+      categoryNames,
+    } = this.state;
 
     let className = "nav-link-active";
     if (this.props.isActive) {
