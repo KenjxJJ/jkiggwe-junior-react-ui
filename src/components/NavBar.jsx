@@ -47,7 +47,10 @@ class NavBarComponent extends Component {
 
   // Close the Cart Overlay
   closeOverlayHandler = () => {
-    this.setState({ showBag: false });
+    if (this.state.showBag) this.setState({ showBag: false });
+
+    if (this.state.displayCurrencySwitcher)
+      this.setState({ displayCurrencySwitcher: false });
   };
 
   closeBagHandler = (e) => {
@@ -142,6 +145,13 @@ class NavBarComponent extends Component {
                   <CurrencySwitcherComponent />
                 )}
               </span>
+              {/* Overlay Backdrop */}
+              {displayCurrencySwitcher === true && (
+                <BackdropComponent
+                  show={displayCurrencySwitcher}
+                  clicked={this.closeOverlayHandler}
+                />
+              )}
 
               <span id="cart-btn" onClick={this.showMyBag}>
                 <span id="cart-number-icon">{bagSize}</span>
@@ -158,7 +168,6 @@ class NavBarComponent extends Component {
                   clicked={this.closeOverlayHandler}
                 />
               )}
-
             </div>
           </header>
         </nav>
