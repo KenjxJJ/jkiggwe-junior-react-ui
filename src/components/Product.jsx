@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { getProductById, addToMyBag } from "../actions/categoriesActions";
 import { withRouterWrapper } from "../wrapper/WithRouterComponent";
+import Parser from "html-react-parser";
 
 class ProductComponent extends Component {
   constructor() {
@@ -154,7 +155,9 @@ class ProductComponent extends Component {
                             {type !== "swatch" &&
                               items.map(({ id, value, index }) => {
                                 let selected = this.state.attribSelected.find(
-                                  (item) => item._value === value && item._id === attributeID
+                                  (item) =>
+                                    item._value === value &&
+                                    item._id === attributeID
                                 );
                                 return (
                                   <span
@@ -163,7 +166,7 @@ class ProductComponent extends Component {
                                       this.saveAttributeHandler({
                                         id: attributeID,
                                         value,
-                                      })
+                                      });
                                     }}
                                     className={
                                       selected
@@ -183,7 +186,7 @@ class ProductComponent extends Component {
 
                                 return (
                                   <span
-                                  key={`${id}-${index}`}
+                                    key={`${id}-${index}`}
                                     onClick={() =>
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -225,10 +228,9 @@ class ProductComponent extends Component {
                 </div>
               )}
 
-              <section
-                className="product-description-text"
-                dangerouslySetInnerHTML={{ __html: description }}
-              ></section>
+              <section className="product-description-text">
+                {Parser(description)}
+              </section>
             </div>
           </main>
         </>
