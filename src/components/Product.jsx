@@ -138,7 +138,18 @@ class ProductComponent extends Component {
             </div>
 
             <div className="product-image-large-display">
-              <img src={this.state.imageLinkToDisplay} alt="" />
+              <div className={
+                              !inStock
+                                ? "img-wrapper-product"
+                                : ""
+                            }>
+                {!inStock ? (
+                  <div className="out-of-stock-text">Out of stock</div>
+                ) : (
+                  ""
+                )}
+                <img src={this.state.imageLinkToDisplay} alt="" />
+              </div>
             </div>
 
             <div className="product-description-detail">
@@ -216,7 +227,7 @@ class ProductComponent extends Component {
                 </span>
               </section>
 
-              {inStock && (
+              {inStock && attributes.length > 0 && (
                 <div className="add-cart-btn-wrapper">
                   <div
                     className="add-cart-btn"
