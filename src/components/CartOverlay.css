@@ -1,22 +1,44 @@
 .cart-overlay {
     z-index: 1400;
     width: 325px;
+    max-height: 50vh;
     padding: 32px 16px 32px 16px;
     position: absolute;
     top: 25px;
-    left: -305px;
+    overflow-y: scroll;
+    left: -325px;
     background-color: #fff;
-    box-sizing: border-box;
+
 }
-.empty-bag{
+
+/* Scroll Bar for cart overlay */
+.cart-overlay::-webkit-scrollbar-track {
+    padding: 2px 0;
+    border: 1px solid rgb(240, 229, 229);
+    background-color: rgb(240, 229, 229);
+}
+
+.cart-overlay::-webkit-scrollbar {
+    width: 5px;
+}
+
+.cart-overlay::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #1d1f2281;
+    border: 1px solid rgba(216, 214, 214, 0.836);
+    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.664);
+}
+
+.empty-bag {
     text-align: center;
     word-spacing: 5px;
     font-weight: 300 !important;
 }
+
 .cart-overlay-overview,
 .cart-overlay-name,
 .cart-overlay-price-label,
-.cart-overlay-size > p,
+.cart-overlay-size>p,
 .cart-overlay-color-attributes>p {
     text-transform: capitalize;
     font-family: unset !important;
@@ -25,7 +47,7 @@
     font-weight: 300;
 }
 
-.cart-overlay-overview{
+.cart-overlay-overview {
     margin-bottom: 0px !important;
 }
 
@@ -72,7 +94,6 @@
     line-height: 160% !important;
     padding: 5% !important;
     flex: 0 0 20% !important;
-    line-height: 160%;
     margin-right: 0px !important;
     margin-bottom: 8px !important;
 }
@@ -168,7 +189,6 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 120%;
-
 }
 
 .view-bag-btn {
