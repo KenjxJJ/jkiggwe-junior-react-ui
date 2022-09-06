@@ -105,12 +105,10 @@ p.product-price-label {
 
 .left-arrow::before {
     content: "<";
-    /* transform: matrix(-1, 0, 0, 1, 0, 0); */
 }
 
 .right-arrow::before {
     content: ">";
-
 }
 
 /* Order-Details */

@@ -151,6 +151,7 @@ class NavBarComponent extends Component {
                   <CartOverlayComponent clicked={this.closeBagHandler} />
                 )}
               </span>
+              {/* Overlay Backdrop */}
               {showBag === true && (
                 <BackdropComponent
                   show={showBag}
@@ -158,7 +159,6 @@ class NavBarComponent extends Component {
                 />
               )}
 
-              {/* Overlay Backdrop */}
             </div>
           </header>
         </nav>

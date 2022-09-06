@@ -80,7 +80,7 @@ class CartOverlayComponent extends Component {
     let { quantities, currencyIndex: currIndex, bagItems } = this.state;
 
     let newPrice = 0;
-    // TODO- Note the different quantities of different items
+    // note the different quantities of different items
     bagItems.forEach((curr, index) => {
       newPrice +=
         curr.prices[currIndex].amount * quantities[index].numberOfItems;
@@ -304,7 +304,6 @@ class CartOverlayComponent extends Component {
               <p
                 onClick={
                   (e) => this.props.clicked(e)
-                  // this.props.navigate("/");
                 }
               >
                 Click to close

@@ -5,39 +5,6 @@ export const getCategory = async (item) => {
     return await client.post(categoryQuery(item));
 }
 
-// {
-//     categories {
-//       name
-//       products {
-//         id
-//         name
-//         brand
-//         inStock
-//         description
-//         attributes {
-//           id
-//           name
-//           items {
-//             id
-//             value
-//             displayValue
-//           }
-//           type
-//         }
-//         gallery
-//         prices {
-//           amount
-//           currency {
-//             label
-//             symbol
-//           }
-//         }
-//         category
-//       }
-//     }
-//   }
-
-
 const categoryQuery = (_title) => {
     return new Query("category", true)
         .addArgument("input", "CategoryInput!", _title)

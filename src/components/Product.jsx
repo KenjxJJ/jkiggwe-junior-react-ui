@@ -39,7 +39,6 @@ class ProductComponent extends Component {
 
     // Set default price
     console.log(this.props._currencyIndex);
-    // this.setState({ currencyIndex: this.props._currencyIndex });
   }
 
   componentDidUpdate(prevProps) {
@@ -51,7 +50,6 @@ class ProductComponent extends Component {
 
   saveAttributeHandler = ({ id, value }) => {
     //  Iterate through attribute record, and new changes or return null
-
     // Initiate the first object
     if (this.state.attribSelected[0]._id === null && id !== null) {
       this.setState({
@@ -87,9 +85,6 @@ class ProductComponent extends Component {
 
     // Set attributes to state
     this.setState({ attribSelected: [...newAttributes] });
-
-    // if(selectedAttrib)
-    // document.querySelector("span.product-attributes-label").classList.toggle("selected-attribute")
   };
 
   addToBagHandler = () => {

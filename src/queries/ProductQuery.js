@@ -6,28 +6,6 @@ export const getProduct = async (product_id) => {
     return await client.post(productQuery(product_id));
 }
 
-
-//   {
-// product(id: "huarache-x-stussy-le") {
-//     id
-//     name
-//     inStock
-//     gallery
-//     description
-//     category
-//     attributes{
-//       id items{
-//         id
-//       }
-//     }
-//     prices{
-//       amount
-//     }
-//     brand
-//   }
-// }
-
-
 const productQuery = (product_id) => {
     return new Query("product", true)
         .addArgument("id", "String!", product_id)
