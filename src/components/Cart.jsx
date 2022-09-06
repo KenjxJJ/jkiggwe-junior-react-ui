@@ -166,7 +166,7 @@ class CartComponent extends Component {
                         <h2 className="product-name">{name}</h2>
                         <p className="product-price-label">
                           {prices[currencyIndex].currency.symbol}
-                          {prices[currencyIndex].amount}{" "}
+                          {prices[currencyIndex].amount.toFixed(2)}{" "}
                         </p>
 
                         <section className="product-size">

@@ -70,7 +70,7 @@ class CategoryComponent extends Component {
                             </h2>
                             <h3 className="price-label">
                               {prices[currencyIndex].currency.symbol}
-                              {prices[currencyIndex].amount}
+                              {prices[currencyIndex].amount.toFixed(2) }
                             </h3>
                           </a>
                         </section>

@@ -212,7 +212,7 @@ class ProductComponent extends Component {
                 <p>Price:</p>
                 <span className="product-price-label">
                   {prices[this.state.currencyIndex].currency.symbol}
-                  {prices[this.state.currencyIndex].amount}
+                  {prices[this.state.currencyIndex].amount.toFixed(2)}
                 </span>
               </section>
 
