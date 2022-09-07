@@ -209,7 +209,7 @@ class CartOverlayComponent extends Component {
                             ))}
                         </section>
                       </section>
-                      <div className="image-quantity-section">
+                        <div className="image-quantity-section image-quantity-section-overlay">
                         <div className="cart-overlay-quantifiers quantifiers">
                           <span
                             className="add-button"
@@ -241,26 +241,6 @@ class CartOverlayComponent extends Component {
                         </div>
                         <div className="cart-overlay-image-wrapper image-wrapper">
                           <img src={gallery[imagePosition]} alt="" />
-                          <div className="arrows arrows-overlay cart-overlay-quantifiers">
-                            <span
-                              onClick={() =>
-                                this.showImageDisplay({
-                                  operation: "previous",
-                                })
-                              }
-                            >
-                              {"<"}
-                            </span>
-                            <span
-                              onClick={() =>
-                                this.showImageDisplay({
-                                  operation: "next",
-                                })
-                              }
-                            >
-                              {">"}
-                            </span>
-                          </div>
                         </div>
                       </div>
                     </div>

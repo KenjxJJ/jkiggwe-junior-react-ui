@@ -27,8 +27,9 @@
     border-top: 1px solid #eee;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
 }
 
 .cart-item:last-child {
@@ -37,7 +38,7 @@
 }
 
 .product-description-detail.cart-detail-item {
-    flex: 0 0 45%;
+    grid-column: 1/2;
 }
 
 p.product-price-label {
@@ -47,8 +48,8 @@ p.product-price-label {
 
 /* Image Display Section with Quantity */
 .image-quantity-section {
+    grid-column: 5;
     display: flex;
-    flex: 0 0 40%;
     justify-content: flex-end;
 }
 
@@ -91,15 +92,16 @@ p.product-price-label {
 }
 
 .arrows>* {
-    width: 20px;
+    width: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 20px;
+    height: 24px;
     background: rgba(0, 0, 0, 0.73);
     color: #fff;
     font-size: 150%;
     padding: 8px 6px;
+    cursor: pointer;
     margin-right: 0.5rem;
 }
 

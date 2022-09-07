@@ -174,7 +174,7 @@ class CartComponent extends Component {
                             attributes.map(({ id, type, items }) => (
                               <>
                                 <p>{id}:</p>
-                                <div className="cart-overlay-size product-info-attributes">
+                                <div className="product-info-attributes">
                                   {type !== "swatch" &&
                                     items.map(({ id, value, index }) => {
                                       const selectedAttrib =
@@ -186,8 +186,8 @@ class CartComponent extends Component {
                                           key={`${id}-${index}`}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute cart-overlay-size-label product-attributes-label"
-                                              : "cart-overlay-size-label product-attributes-label"
+                                              ? "selected-attribute product-attributes-label"
+                                              : "product-attributes-label"
                                           }
                                         >
                                           {value}
@@ -206,8 +206,8 @@ class CartComponent extends Component {
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute-color cart-overlay-color product-color"
-                                              : "cart-overlay-color product-color"
+                                              ? "selected-attribute-color  product-color"
+                                              : "product-color"
                                           }
                                         ></span>
                                       );
