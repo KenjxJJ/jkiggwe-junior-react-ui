@@ -106,9 +106,6 @@ class ProductComponent extends Component {
     };
     // add to cart
     this.props.addToMyBag(newCart);
-
-    // Return to homepage(Category Page)
-    this.props.navigate("/");
   };
 
   render() {
@@ -231,7 +228,6 @@ class ProductComponent extends Component {
                 <div className="add-cart-btn-wrapper">
                   <div
                     className="add-cart-btn"
-                    href="/"
                     onClick={() => this.addToBagHandler()}
                   >
                     Add to cart
