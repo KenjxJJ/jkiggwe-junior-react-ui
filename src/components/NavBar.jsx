@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import "./NavBar.css";
 import logoIcon from "./../assets/logo.svg";
 import cartIcon from "./../assets/icon/cart.svg";
@@ -104,12 +105,8 @@ class NavBarComponent extends Component {
       displayCurrencySwitcher,
       currencySymbol,
       categoryNames,
+      isActive
     } = this.state;
-
-    let className = "nav-link-active";
-    if (this.props.isActive) {
-      className += "nav-link-active";
-    }
 
     return (
       <>
@@ -118,15 +115,15 @@ class NavBarComponent extends Component {
             <div className="category-name">
               {categoryNames.map(({ title }) => {
                 return (
-                  <span
-                    className={className}
+                  <NavLink
+                  to="/"
                     key={title}
                     onClick={() => {
                       this.selectCategoryName(title);
                     }}
                   >
                     {title}
-                  </span>
+                  </NavLink>
                 );
               })}
             </div>
