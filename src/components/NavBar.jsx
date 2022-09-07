@@ -23,7 +23,7 @@ class NavBarComponent extends Component {
       currencySymbol: "$",
       bagSize: 0,
       inverted: false,
-      categoryNames: [{ title: "all" }],
+      categoryNames: [{ title: "" }],
     };
 
     this.showCurrencySwitcher = this.showCurrencySwitcher.bind(this);
@@ -104,8 +104,7 @@ class NavBarComponent extends Component {
       showBag,
       displayCurrencySwitcher,
       currencySymbol,
-      categoryNames,
-      isActive
+      categoryNames
     } = this.state;
 
     return (

@@ -28,7 +28,7 @@ class CategoryComponent extends Component {
 
   componentDidMount() {
     if (this.props.category !== null) {
-      this.setState({ category: this.props.category[0] });
+      this.setState({ category: this.props.category });
     }
   }
 
