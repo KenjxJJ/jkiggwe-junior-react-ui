@@ -99,7 +99,7 @@ section:not(.product-description-text) {
 }
 
 /* Product-Attributes Section */
-.product-attributes>p {
+.product-attributes p {
     font-family: 'Roboto Condensed', sans-serif;
     line-height: 18px;
     display: block;
@@ -142,6 +142,9 @@ section:not(.product-description-text) {
 
 
 /* Product-Color */
+div.product-info-attributes  .product-color{
+   grid-template-columns:  1fr 1fr 1fr;
+}
 .product-color-attributes>p {
     font-size: 18px;
     line-height: 18px;

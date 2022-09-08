@@ -163,18 +163,18 @@ class CartComponent extends Component {
                     <div className="cart-item">
                       <section className="cart-detail-item product-description-detail">
                         <h1 className="brand">{brand}</h1>
-                        <h2 className="product-name">{name}</h2>
+                        <h2 className="product-name cart-item-name">{name}</h2>
                         <p className="product-price-label">
                           {prices[currencyIndex].currency.symbol}
                           {prices[currencyIndex].amount.toFixed(2)}{" "}
                         </p>
 
-                        <section className="product-size">
+                        <section className="product-size cart-item-info">
                           {attributes &&
                             attributes.map(({ id, type, items }) => (
                               <>
                                 <p>{id}:</p>
-                                <div className="product-info-attributes">
+                                <div className="product-info-attributes cart-item-info-attributes">
                                   {type !== "swatch" &&
                                     items.map(({ id, value, index }) => {
                                       const selectedAttrib =
@@ -206,8 +206,8 @@ class CartComponent extends Component {
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute-color  product-color"
-                                              : "product-color"
+                                              ? "selected-attribute-color product-color cart-item-color"
+                                              : "product-color cart-item-color"
                                           }
                                         ></span>
                                       );
@@ -247,7 +247,7 @@ class CartComponent extends Component {
                             }
                           >
                             {" "}
-                            -{" "}
+                            - {" "}
                           </span>
                         </div>
                         <div className="image-wrapper">
