@@ -41,7 +41,7 @@ a {
 }
 
 .img-wrapper {
-    height: 390px;
+    height: 400px;
     position: relative;
     display: flex;
     align-items: center;
@@ -68,7 +68,7 @@ a {
 .item-image {
     width: 100%;
     height: 100%; 
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .title {
