@@ -4,6 +4,7 @@ import "./Cart.css";
 
 import { withRouterWrapper } from "../wrapper/WithRouterComponent";
 import { connect } from "react-redux";
+import { removeCartItemFromBag } from "./../actions/categoriesActions"
 
 class CartComponent extends Component {
   constructor() {
@@ -60,13 +61,19 @@ class CartComponent extends Component {
       // Search and replace number of items based on indexed location of the product
       let _quantities = this.state.quantities.map((quantityItem) => {
         let { id, numberOfItems } = quantityItem;
-        if (id === index)
-          return {
-            id,
-            numberOfItems: numberOfItems > 1 ? (numberOfItems -= 1) : 1,
-          };
+        if (id === index && numberOfItems > 1) return { id, numberOfItems: (numberOfItems -= 1) };
+        else {
+          // Remove from store of the cart item in the bag
+          const [item] = this.props.myBag.filter((item, i) => {
+            return i === index;
+          });
+
+          this.props.removeCartItemFromBag(item);
+        }
         return quantityItem;
       });
+
+      // Update quantity value
       this.setState(
         {
           quantities: _quantities,
@@ -74,7 +81,6 @@ class CartComponent extends Component {
         () => this.changeTotalPrice()
       );
     }
-    // TODO - You can remove by minus to zero(quantity)
   };
 
   changeTotalPrice = () => {
@@ -128,13 +134,18 @@ class CartComponent extends Component {
   }
 
   componentDidUpdate(prevProps) {
-      if (this.props._currencyIndex !== prevProps._currencyIndex) {
-      this.setState({ currencyIndex: this.props._currencyIndex }, ()=>{
-         this.changeTotalPrice()
+    if (this.props._currencyIndex !== prevProps._currencyIndex) {
+      this.setState({ currencyIndex: this.props._currencyIndex }, () => {
+        this.changeTotalPrice()
+      });
+    }
+
+    if (this.props.myBag.length !== prevProps.myBag.length) {
+      this.setState({ bagItems: this.props.myBag }, () => {
+        this.changeTotalPrice();
       });
     }
   }
-
 
   render() {
     const {
@@ -326,4 +337,4 @@ const mapStateToProps = (state) => ({
   myBag: state.category.myBag,
 });
 
-export default connect(mapStateToProps, null)(withRouterWrapper(CartComponent));
+export default connect(mapStateToProps, { removeCartItemFromBag })(withRouterWrapper(CartComponent));

@@ -1,4 +1,4 @@
-import { GET_CATEGORY_BY_TITLE, ADD_TO_MY_BAG, VIEW_MY_BAG, GET_CURRENCIES, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
+import { GET_CATEGORY_BY_TITLE, ADD_TO_MY_BAG, VIEW_MY_BAG, GET_CURRENCIES, REMOVE_ITEM_FROM_BAG, GET_PRODUCT_BY_ID, CHANGE_CURRENCY_INDEX, GET_CATEGORY_NAMES } from "../actions/types";
 
 const initialState = {
     category: null,
@@ -39,6 +39,14 @@ export default function categoriesReducers(state = initialState, action) {
             return {
                 ...state,
                 myBag: [...state.myBag, action.payload]
+            }
+        case REMOVE_ITEM_FROM_BAG:
+            // Remove item from the list
+            const remainingItems = state.myBag.filter((bagItem) => (bagItem !== action.payload));
+
+            return {
+                ...state,
+                myBag: [...remainingItems]
             }
         case VIEW_MY_BAG:
             return {
