@@ -91,6 +91,44 @@ class ProductComponent extends Component {
   addToBagHandler = () => {
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
+    let isAlreadyAdded = false;
+
+    //  Check if there is an exact  existing product name from myBag
+    isAlreadyAdded = this.props.bagCollection.find((bagItem) => bagItem.name === _product.name);
+
+    if (isAlreadyAdded) {
+      // Check if the attributesSelected are present 
+      let found = attribSelected.find((_itemFromStore) => {
+        let element = isAlreadyAdded.attribSelected.find((item) => item._value === _itemFromStore._value);
+        return element;
+      });
+
+      if (found) {
+        isAlreadyAdded = { ...isAlreadyAdded, quantity: isAlreadyAdded.quantity + 1 };
+        // add to cart
+        this.props.addToMyBag(isAlreadyAdded);
+
+      } else {
+        // Or place new different kind of the product
+        // Obtain product in view
+        const { name, gallery, attributes, brand, description, prices } = _product;
+
+        // Save product
+        const newCart = {
+          name,
+          gallery,
+          brand,
+          description,
+          prices,
+          attributes,
+          attribSelected,
+          quantity: 1
+        };
+        // add to cart
+        this.props.addToMyBag(newCart);
+      }
+      return;
+    }
     // Obtain product in view
     const { name, gallery, attributes, brand, description, prices } = _product;
 
@@ -103,9 +141,12 @@ class ProductComponent extends Component {
       prices,
       attributes,
       attribSelected,
+      quantity: 1
     };
     // add to cart
     this.props.addToMyBag(newCart);
+
+
   };
 
   render() {
@@ -136,10 +177,10 @@ class ProductComponent extends Component {
 
             <div className="product-image-large-display">
               <div className={
-                              !inStock
-                                ? "img-wrapper-product"
-                                : ""
-                            }>
+                !inStock
+                  ? "img-wrapper-product"
+                  : ""
+              }>
                 {!inStock ? (
                   <div className="out-of-stock-text">Out of stock</div>
                 ) : (

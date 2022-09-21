@@ -36,10 +36,45 @@ export default function categoriesReducers(state = initialState, action) {
                 product: action.payload
             }
         case ADD_TO_MY_BAG:
-            return {
-                ...state,
-                myBag: [...state.myBag, action.payload]
+            // Checking if an item already exists in store
+            let isExistingItems = state.myBag.filter((item) => item.name === action.payload.name);
+            let found = false;
+
+            console.log("filteredNameArray", isExistingItems);
+
+            if (isExistingItems.length > 0) {
+                isExistingItems.forEach((singleItem, index) => {
+                    // Check if the existing item has new or same attributes(for stacking purposes)
+                    // Obtain array of attributes from the incoming object
+                    let { attribSelected } = singleItem;
+                    // Iterate through the values and check for similarity
+                    attribSelected.forEach((_itemFromStore) => {
+                        action.payload.attribSelected.every((item) => {
+                            if (item._value === _itemFromStore._value) {
+                                isExistingItems[index].quantity += 1;
+                                found = !found;
+                            }
+                            return item._value === _itemFromStore._value;
+                        });
+                    });
+                })
             }
+
+            // Add first item, or non-existent new item or similar item with new attributes
+            if (state.myBag.length === 0 || !isExistingItems || found === false) {
+                return {
+                    ...state,
+                    myBag: [...state.myBag, action.payload]
+                }
+            }
+            else {
+                const otherItems = state.myBag.filter((item) => (item.name !== action.payload.name));
+                return {
+                    ...state,
+                    myBag: [...otherItems, ...isExistingItems]
+                }
+            };
+
         case REMOVE_ITEM_FROM_BAG:
             // Remove item from the list
             const remainingItems = state.myBag.filter((bagItem) => (bagItem !== action.payload));
