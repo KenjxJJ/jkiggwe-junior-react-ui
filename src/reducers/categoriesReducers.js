@@ -40,23 +40,23 @@ export default function categoriesReducers(state = initialState, action) {
             let isExistingItems = state.myBag.filter((item) => item.name === action.payload.name);
             let found = false;
 
-            console.log("filteredNameArray", isExistingItems);
+            function sortFn(a, b) {
+                let x = a._id.toLowerCase();
+                let y = b._id.toLowerCase();
+                if (x < y) { return -1; }
+                if (x > y) { return 1; }
+                return 0;
+            }
 
             if (isExistingItems.length > 0) {
                 isExistingItems.forEach((singleItem, index) => {
                     // Check if the existing item has new or same attributes(for stacking purposes)
                     // Obtain array of attributes from the incoming object
-                    let { attribSelected } = singleItem;
-                    // Iterate through the values and check for similarity
-                    attribSelected.forEach((_itemFromStore) => {
-                        action.payload.attribSelected.every((item) => {
-                            if (item._value === _itemFromStore._value) {
-                                isExistingItems[index].quantity += 1;
-                                found = !found;
-                            }
-                            return item._value === _itemFromStore._value;
-                        });
-                    });
+                    let { attribSelected } = singleItem;                
+                    if (JSON.stringify(attribSelected.sort(sortFn)) === JSON.stringify(action.payload.attribSelected.sort(sortFn))) {
+                        isExistingItems[index].quantity += 1;
+                        found = true;
+                    }
                 })
             }
 

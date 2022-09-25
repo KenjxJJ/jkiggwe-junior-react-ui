@@ -16,81 +16,52 @@ class CartOverlayComponent extends Component {
       bagItems: [],
       imagePosition: 0,
       total_price: 0,
-      quantities: [{ id: 0, numberOfItems: 1 }],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
     this.changeTotalPrice = this.changeTotalPrice.bind(this);
-    this.showImageDisplay = this.showImageDisplay.bind(this);
   }
 
-  // Show another image, by updating its index(value-location)
-  showImageDisplay = ({ operation }) => {
-    // show previous image-step backwards
-    if (operation === "previous") {
-      if (this.state.imagePosition !== 0)
-        this.setState({ imagePosition: this.state.imagePosition - 1 });
-    }
-    //show next image forward
-    if (operation === "next") {
-      // Obtain the largest index of the gallery image
-      const largest = this.state.bagItems[0].gallery.length;
-      if (this.state.imagePosition < largest - 1)
-        this.setState({ imagePosition: this.state.imagePosition + 1 });
-    }
-  };
 
   // Change the value of quantities by addition or subtraction
   changeQuantity = ({ operation, index }) => {
+    let { bagItems } = this.state;
+
     if (operation === "addition") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index) return { id, numberOfItems: (numberOfItems += 1) };
-        return quantityItem;
-      });
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Locate item by index
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      // Update the quantity value by index
+      itemFound.quantity += 1;
+      // Update total price
+      this.changeTotalPrice();
     }
 
     if (operation === "subtraction") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index && numberOfItems > 1) return { id, numberOfItems: (numberOfItems -= 1) };
-        else {
-          // Remove from store of the cart item in the bag
-          const [item] = this.props.myBag.filter((item, i) => {
-            return i === index;
-          });
+      // Obtain the quantity value of the selected item
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      let _quantityObtained = itemFound.quantity;
 
-          this.props.removeCartItemFromBag(item);
-        }
-        return quantityItem;
-      });
-
-      // Update quantity value
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Reduce value by 1, if its greater or remove from list
+      if (_quantityObtained > 1) {
+        itemFound.quantity -= 1;
+        this.changeTotalPrice();
+      }
+      else {
+        // remove from list of items in the bag.
+        this.props.removeCartItemFromBag(itemFound);
+        this.setState({ bagSize: 0 });
+      }
     }
   };
 
   changeTotalPrice = () => {
-    let { quantities, currencyIndex: currIndex, bagItems } = this.state;
+    let { currencyIndex: currIndex, bagItems } = this.state;
 
     let newPrice = 0;
     // note the different quantities of different items
     bagItems.forEach((curr, index) => {
       newPrice +=
-        curr.prices[currIndex].amount * quantities[index].numberOfItems;
+        curr.prices[currIndex].amount * bagItems[index].quantity;
     });
     // Add Tax to final price
     let newPriceFinal = 0.21 * newPrice + newPrice;
@@ -106,21 +77,8 @@ class CartOverlayComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
-
-      // set quantities array for more than one item
-      let count = bagItems.length;
-      let idNumber = 1;
-      let newQuantitiesArray = [];
-
-      while (count > 1) {
-        newQuantitiesArray.push({ id: idNumber, numberOfItems: 1 });
-        idNumber++;
-        count--;
-      }
-      this.setState({
-        quantities: [...this.state.quantities, ...newQuantitiesArray],
-      });
     }
+
   }
 
   componentDidUpdate(prevProps) {
@@ -135,13 +93,13 @@ class CartOverlayComponent extends Component {
         this.changeTotalPrice();
       });
     }
+
   }
 
   render() {
     const {
       bagSize,
       bagItems,
-      quantities,
       currencyIndex,
       total_price,
       imagePosition,
@@ -159,7 +117,7 @@ class CartOverlayComponent extends Component {
             <div className="cart-overlay-items cart-items">
               {bagItems.map(
                 (
-                  { brand, name, attributes, attribSelected, gallery, prices },
+                  { brand, name, attributes, attribSelected, gallery, prices, quantity },
                   index
                 ) => (
                   <>
@@ -237,7 +195,8 @@ class CartOverlayComponent extends Component {
                             +{" "}
                           </span>
                           <span className="quantity-value">
-                            {quantities[index].numberOfItems}
+                            {/* {quantities[index].numberOfItems} */}
+                            {quantity}
                           </span>
                           <span
                             className="subtract-button"

@@ -8,7 +8,6 @@
     overflow-y: scroll;
     left: -325px;
     background-color: #fff;
-
 }
 
 /* Scroll Bar for cart overlay */
@@ -64,7 +63,6 @@
 .cart-overlay-items {
     margin-top: 32px;
     margin-bottom: 32px;
-
 }
 
 .cart-overlay-item {
