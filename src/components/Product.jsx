@@ -38,8 +38,7 @@ class ProductComponent extends Component {
     const defaultImage = this.props.product.gallery[0];
     this.setState({ imageLinkToDisplay: defaultImage });
 
-    // Set default price
-    console.log(this.props._currencyIndex);
+  
   }
 
   componentDidUpdate(prevProps) {
@@ -50,7 +49,7 @@ class ProductComponent extends Component {
   }
 
   saveAttributeHandler = ({ id, value }) => {
-    //  Iterate through attribute record, and new changes or return null
+    //  Iterate through attribute record, and add new changes or return null
     // Initiate the first object
     if (this.state.attribSelected[0]._id === null && id !== null) {
       this.setState({
@@ -67,10 +66,11 @@ class ProductComponent extends Component {
     let selectedAttributes = [...this.state.attribSelected];
     let newAttributes = [];
 
-    // Search for the match attribute
+    // Search for the match attribute by id to change to the new attribute
     let result = selectedAttributes.find(
-      ({ _id, _value }) => _id === id && _value !== value
+      ({ _id, _value }) => (_id === id && _value !== value)
     );
+
 
     if (result) {
       // Rename the properties of the attributes
@@ -80,7 +80,9 @@ class ProductComponent extends Component {
       // Set final result
       if (rest) newAttributes = [result, ...rest];
       else newAttributes = [result];
-    } else {
+    }
+    // Append to the end of list
+    else {
       newAttributes = [...selectedAttributes, { _id: id, _value: value }];
     }
 
@@ -91,30 +93,39 @@ class ProductComponent extends Component {
   addToBagHandler = () => {
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
-    let isAlreadyAdded = false;
+    let isAlreadyAddedItem = false;
 
     //  Check if there is an exact  existing product name from myBag
-    isAlreadyAdded = this.props.bagCollection.find((bagItem) => bagItem.name === _product.name);
+    isAlreadyAddedItem = this.props.bagCollection.filter((bagItem) => bagItem.name === _product.name);
 
-    if (isAlreadyAdded) {
+    if (isAlreadyAddedItem.length > 0) {
+      let isFound = false;
+      let foundIndex = -1;
+
       // Check if the attributesSelected are present 
-      let found = attribSelected.find((_itemFromStore) => {
-        let element = isAlreadyAdded.attribSelected.find((item) => item._value === _itemFromStore._value);
-        return element;
+      isAlreadyAddedItem.forEach((item, index) => {
+        // Obtain attrib array
+        let { attribSelected: attributesFromStore } = item;
+
+        attributesFromStore.forEach((attrib) => {
+          if (attrib._value !== attribSelected._value) {
+            // Obtain the position/location
+            foundIndex = index;
+            isFound = true;
+          }
+        })
       });
 
-      if (found) {
-        isAlreadyAdded = { ...isAlreadyAdded, quantity: isAlreadyAdded.quantity + 1 };
+      if (!isFound) {
         // add to cart
-        this.props.addToMyBag(isAlreadyAdded);
-
-      } else {
-        // Or place new different kind of the product
-        // Obtain product in view
+        this.props.addToMyBag(isAlreadyAddedItem[foundIndex]);
+      }
+      // Incase not found
+      else {
         const { name, gallery, attributes, brand, description, prices } = _product;
 
         // Save product
-        const newCart = {
+        const newProductDifferentAttrib= {
           name,
           gallery,
           brand,
@@ -125,28 +136,25 @@ class ProductComponent extends Component {
           quantity: 1
         };
         // add to cart
-        this.props.addToMyBag(newCart);
+        this.props.addToMyBag(newProductDifferentAttrib);
       }
-      return;
+
+    } else {
+      const { name, gallery, attributes, brand, description, prices } = _product;
+      // Save product
+      const newProductItem = {
+        name,
+        gallery,
+        brand,
+        description,
+        prices,
+        attributes,
+        attribSelected,
+        quantity: 1
+      };
+      // add to cart
+      this.props.addToMyBag(newProductItem);
     }
-    // Obtain product in view
-    const { name, gallery, attributes, brand, description, prices } = _product;
-
-    // Save product
-    const newCart = {
-      name,
-      gallery,
-      brand,
-      description,
-      prices,
-      attributes,
-      attribSelected,
-      quantity: 1
-    };
-    // add to cart
-    this.props.addToMyBag(newCart);
-
-
   };
 
   render() {
