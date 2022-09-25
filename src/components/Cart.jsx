@@ -16,7 +16,6 @@ class CartComponent extends Component {
       imagePosition: 0,
       total_price: 0,
       total_price_tax: 0,
-      quantities: [{ id: 0, numberOfItems: 1 }],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
@@ -42,46 +41,35 @@ class CartComponent extends Component {
 
   // Change the value of quantities by addition or subtraction
   changeQuantity = ({ operation, index }) => {
+    let { bagItems } = this.state;
+
     if (operation === "addition") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index) return { id, numberOfItems: (numberOfItems += 1) };
-        return quantityItem;
-      });
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Locate item by index
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      // Update the quantity value by index
+      itemFound.quantity += 1;
+      // Update total price
+      this.changeTotalPrice();
     }
 
     if (operation === "subtraction") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index && numberOfItems > 1) return { id, numberOfItems: (numberOfItems -= 1) };
-        else {
-          // Remove from store of the cart item in the bag
-          const [item] = this.props.myBag.filter((item, i) => {
-            return i === index;
-          });
+      // Obtain the quantity value of the selected item
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      let _quantityObtained = itemFound.quantity;
 
-          this.props.removeCartItemFromBag(item);
-        }
-        return quantityItem;
-      });
-
-      // Update quantity value
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Reduce value by 1, if its greater or remove from list
+      if (_quantityObtained > 1) {
+        itemFound.quantity -= 1;
+        this.changeTotalPrice();
+      }
+      else {
+        // remove from list of items in the bag.
+        this.props.removeCartItemFromBag(itemFound);
+        this.setState({ bagSize: 0 });
+      }
     }
   };
+
 
   changeTotalPrice = () => {
     let {
@@ -95,8 +83,8 @@ class CartComponent extends Component {
 
     bagItems.forEach((curr, index) => {
       newPrice +=
-        curr.prices[currIndex].amount * quantities[index].numberOfItems;
-      allItemsSize += quantities[index].numberOfItems;
+        curr.prices[currIndex].amount * bagItems[index].quantity;
+      allItemsSize += bagItems[index].quantity;
     });
 
     // Add Tax to final price
@@ -116,20 +104,6 @@ class CartComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
-
-      // set quantities array for more than one item
-      let count = bagItems.length;
-      let idNumber = 1;
-      let newQuantitiesArray = [];
-
-      while (count > 1) {
-        newQuantitiesArray.push({ id: idNumber, numberOfItems: 1 });
-        idNumber++;
-        count--;
-      }
-      this.setState({
-        quantities: [...this.state.quantities, ...newQuantitiesArray],
-      });
     }
   }
 
@@ -151,7 +125,6 @@ class CartComponent extends Component {
     const {
       bagSize,
       bagItems,
-      quantities,
       currencyIndex,
       total_price,
       total_price_tax,
@@ -167,7 +140,7 @@ class CartComponent extends Component {
             <div className="cart-items">
               {bagItems.map(
                 (
-                  { brand, name, attributes, attribSelected, gallery, prices },
+                  { brand, name, attributes, attribSelected, quantity, gallery, prices },
                   index
                 ) => (
                   <>
@@ -246,7 +219,7 @@ class CartComponent extends Component {
                             +{" "}
                           </span>
                           <span className="quantity-value">
-                            {quantities[index].numberOfItems}
+                            {quantity}
                           </span>
                           <span
                             className="subtract-button"
