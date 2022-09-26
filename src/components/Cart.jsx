@@ -181,7 +181,7 @@ class CartComponent extends Component {
                                       );
                                     })}
                                   {type === "swatch" &&
-                                    items.map(({ id, value }) => {
+                                    items.map(({ id:__id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
                                           (attr) => attr._value === value  && attr.id === id
