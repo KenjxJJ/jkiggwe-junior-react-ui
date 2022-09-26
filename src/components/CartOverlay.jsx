@@ -139,10 +139,10 @@ class CartOverlayComponent extends Component {
                                 <p>{id}:</p>
                                 <div className="cart-overlay-size product-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id, value, index }) => {
+                                    items.map(({ id:__id, value, index }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => attr._value === value && attr._id === id
                                         );
                                       return (
                                         <span
@@ -161,7 +161,7 @@ class CartOverlayComponent extends Component {
                                     items.map(({ id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => attr._value === value && attr.id === id
                                         );
                                       return (
                                         <span

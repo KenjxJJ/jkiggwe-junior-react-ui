@@ -184,7 +184,7 @@ class CartComponent extends Component {
                                     items.map(({ id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => attr._value === value  && attr.id === id
                                         );
                                       return (
                                         <span
