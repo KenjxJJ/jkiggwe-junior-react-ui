@@ -73,7 +73,6 @@ class CartComponent extends Component {
 
   changeTotalPrice = () => {
     let {
-      quantities,
       currencyIndex: currIndex,
       bagItems
     } = this.state;
@@ -161,6 +160,7 @@ class CartComponent extends Component {
                                 <div className="product-info-attributes cart-item-info-attributes">
                                   {type !== "swatch" &&
                                     items.map(({ id, value, index }) => {
+                                      //
                                       const selectedAttrib =
                                         attribSelected.find(
                                           (attr) => attr._value === value
@@ -295,9 +295,12 @@ class CartComponent extends Component {
         )}
         {bagSize === 0 && (
           <>
-            <main className="cart-details">
-              <h2>Bag Empty!</h2>
-              <p onClick={this.props.navigate("/")}>See Categories</p>
+            <main className="cart-details empty-bag empty-bag-cart">
+              <h1>Bag Empty!</h1>
+              <p>See <a href="/" className="link-to-categories">
+                Categories
+              </a>
+              </p>
             </main>
           </>
         )}
