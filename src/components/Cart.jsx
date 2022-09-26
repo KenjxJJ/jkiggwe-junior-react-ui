@@ -135,7 +135,6 @@ class CartComponent extends Component {
         {bagSize !== 0 && (
           <main className="cart-details">
             <h1>Cart</h1>
-
             <div className="cart-items">
               {bagItems.map(
                 (
@@ -159,12 +158,15 @@ class CartComponent extends Component {
                                 <p>{id}:</p>
                                 <div className="product-info-attributes cart-item-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id, value, index }) => {
-                                      //
+                                    items.map(({ id: __id, value, index }) => {
+
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => {
+                                            return attr._value === value && attr._id === id
+                                          }
                                         );
+
                                       return (
                                         <span
                                           key={`${id}-${index}`}
