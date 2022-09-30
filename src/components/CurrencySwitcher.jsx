@@ -7,7 +7,6 @@ import { changeCurrency, getAllCurrencies } from "../actions/categoriesActions";
 class CurrencySwitcherComponent extends Component {
   constructor() {
     super();
-
     this.changeCurrencyHandler = this.changeCurrencyHandler.bind(this);
   }
 

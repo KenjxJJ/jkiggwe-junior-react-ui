@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import "./NavBar.css";
 import logoIcon from "./../assets/logo.svg";
 import cartIcon from "./../assets/icon/cart.svg";
@@ -22,7 +23,7 @@ class NavBarComponent extends Component {
       currencySymbol: "$",
       bagSize: 0,
       inverted: false,
-      categoryNames: [{ title: "all" }],
+      categoryNames: [{ title: "" }],
     };
 
     this.showCurrencySwitcher = this.showCurrencySwitcher.bind(this);
@@ -47,7 +48,10 @@ class NavBarComponent extends Component {
 
   // Close the Cart Overlay
   closeOverlayHandler = () => {
-    this.setState({ showBag: false });
+    if (this.state.showBag) this.setState({ showBag: false });
+
+    if (this.state.displayCurrencySwitcher)
+      this.setState({ displayCurrencySwitcher: false });
   };
 
   closeBagHandler = (e) => {
@@ -60,10 +64,10 @@ class NavBarComponent extends Component {
     if (this.props.currencyIndex !== prevProps.currencyIndex) {
       const currencyIndex = this.props.currencyIndex;
       const [currencies] = this.props.currencies;
-      const { symbol } = currencies.find((curr, index) => {
-        if (index === currencyIndex) return curr;
-        return curr;
-      });
+
+      const { symbol } = currencies.find(
+        (_curr, index) => index === currencyIndex
+      );
       this.setState({ currencySymbol: symbol });
     }
 
@@ -94,12 +98,14 @@ class NavBarComponent extends Component {
   }
 
   render() {
-    let { inverted, bagSize, showBag, displayCurrencySwitcher, currencySymbol, categoryNames } = this.state;
-
-    let className = "nav-link-active";
-    if (this.props.isActive) {
-      className += "nav-link-active";
-    }
+    let {
+      inverted,
+      bagSize,
+      showBag,
+      displayCurrencySwitcher,
+      currencySymbol,
+      categoryNames
+    } = this.state;
 
     return (
       <>
@@ -108,15 +114,15 @@ class NavBarComponent extends Component {
             <div className="category-name">
               {categoryNames.map(({ title }) => {
                 return (
-                  <span
-                    className={className}
+                  <NavLink
+                  to="/"
                     key={title}
                     onClick={() => {
                       this.selectCategoryName(title);
                     }}
                   >
                     {title}
-                  </span>
+                  </NavLink>
                 );
               })}
             </div>
@@ -135,6 +141,13 @@ class NavBarComponent extends Component {
                   <CurrencySwitcherComponent />
                 )}
               </span>
+              {/* Overlay Backdrop */}
+              {displayCurrencySwitcher === true && (
+                <BackdropComponent
+                  show={displayCurrencySwitcher}
+                  clicked={this.closeOverlayHandler}
+                />
+              )}
 
               <span id="cart-btn" onClick={this.showMyBag}>
                 <span id="cart-number-icon">{bagSize}</span>
@@ -144,14 +157,13 @@ class NavBarComponent extends Component {
                   <CartOverlayComponent clicked={this.closeBagHandler} />
                 )}
               </span>
+              {/* Overlay Backdrop */}
               {showBag === true && (
                 <BackdropComponent
                   show={showBag}
                   clicked={this.closeOverlayHandler}
                 />
               )}
-
-              {/* Overlay Backdrop */}
             </div>
           </header>
         </nav>

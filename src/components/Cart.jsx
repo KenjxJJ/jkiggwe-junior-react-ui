@@ -4,6 +4,7 @@ import "./Cart.css";
 
 import { withRouterWrapper } from "../wrapper/WithRouterComponent";
 import { connect } from "react-redux";
+import { removeCartItemFromBag } from "./../actions/categoriesActions"
 
 class CartComponent extends Component {
   constructor() {
@@ -15,7 +16,6 @@ class CartComponent extends Component {
       imagePosition: 0,
       total_price: 0,
       total_price_tax: 0,
-      quantities: [{ id: 0, numberOfItems: 1 }],
     };
 
     this.changeQuantity = this.changeQuantity.bind(this);
@@ -41,45 +41,38 @@ class CartComponent extends Component {
 
   // Change the value of quantities by addition or subtraction
   changeQuantity = ({ operation, index }) => {
+    let { bagItems } = this.state;
+
     if (operation === "addition") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index) return { id, numberOfItems: (numberOfItems += 1) };
-        return quantityItem;
-      });
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Locate item by index
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      // Update the quantity value by index
+      itemFound.quantity += 1;
+      // Update total price
+      this.changeTotalPrice();
     }
 
     if (operation === "subtraction") {
-      // Search and replace number of items based on indexed location of the product
-      let _quantities = this.state.quantities.map((quantityItem) => {
-        let { id, numberOfItems } = quantityItem;
-        if (id === index)
-          return {
-            id,
-            numberOfItems: numberOfItems > 1 ? (numberOfItems -= 1) : 1,
-          };
-        return quantityItem;
-      });
-      this.setState(
-        {
-          quantities: _quantities,
-        },
-        () => this.changeTotalPrice()
-      );
+      // Obtain the quantity value of the selected item
+      let itemFound = bagItems.find((_itemInBag, _index) => _index === index);
+      let _quantityObtained = itemFound.quantity;
+
+      // Reduce value by 1, if its greater or remove from list
+      if (_quantityObtained > 1) {
+        itemFound.quantity -= 1;
+        this.changeTotalPrice();
+      }
+      else {
+        // remove from list of items in the bag.
+        this.props.removeCartItemFromBag(itemFound);
+        this.setState({ bagSize: 0 });
+      }
     }
-    // TODO - You can remove by minus to zero(quantity)
   };
+
 
   changeTotalPrice = () => {
     let {
-      quantities,
       currencyIndex: currIndex,
       bagItems
     } = this.state;
@@ -89,8 +82,8 @@ class CartComponent extends Component {
 
     bagItems.forEach((curr, index) => {
       newPrice +=
-        curr.prices[currIndex].amount * quantities[index].numberOfItems;
-      allItemsSize += quantities[index].numberOfItems;
+        curr.prices[currIndex].amount * bagItems[index].quantity;
+      allItemsSize += bagItems[index].quantity;
     });
 
     // Add Tax to final price
@@ -110,37 +103,27 @@ class CartComponent extends Component {
       this.setState({ bagSize: bagItems.length }, () =>
         this.changeTotalPrice()
       );
-
-      // set quantities array for more than one item
-      let count = bagItems.length;
-      let idNumber = 1;
-      let newQuantitiesArray = [];
-
-      while (count > 1) {
-        newQuantitiesArray.push({ id: idNumber, numberOfItems: 1 });
-        idNumber++;
-        count--;
-      }
-      this.setState({
-        quantities: [...this.state.quantities, ...newQuantitiesArray],
-      });
     }
   }
 
   componentDidUpdate(prevProps) {
-      if (this.props._currencyIndex !== prevProps._currencyIndex) {
-      this.setState({ currencyIndex: this.props._currencyIndex }, ()=>{
-         this.changeTotalPrice()
+    if (this.props._currencyIndex !== prevProps._currencyIndex) {
+      this.setState({ currencyIndex: this.props._currencyIndex }, () => {
+        this.changeTotalPrice()
+      });
+    }
+
+    if (this.props.myBag.length !== prevProps.myBag.length) {
+      this.setState({ bagItems: this.props.myBag }, () => {
+        this.changeTotalPrice();
       });
     }
   }
-
 
   render() {
     const {
       bagSize,
       bagItems,
-      quantities,
       currencyIndex,
       total_price,
       total_price_tax,
@@ -152,42 +135,45 @@ class CartComponent extends Component {
         {bagSize !== 0 && (
           <main className="cart-details">
             <h1>Cart</h1>
-
             <div className="cart-items">
               {bagItems.map(
                 (
-                  { brand, name, attributes, attribSelected, gallery, prices },
+                  { brand, name, attributes, attribSelected, quantity, gallery, prices },
                   index
                 ) => (
                   <>
                     <div className="cart-item">
                       <section className="cart-detail-item product-description-detail">
                         <h1 className="brand">{brand}</h1>
-                        <h2 className="product-name">{name}</h2>
+                        <h2 className="product-name cart-item-name">{name}</h2>
                         <p className="product-price-label">
                           {prices[currencyIndex].currency.symbol}
-                          {prices[currencyIndex].amount}{" "}
+                          {prices[currencyIndex].amount.toFixed(2)}{" "}
                         </p>
 
-                        <section className="product-size">
+                        <section className="product-size cart-item-info">
                           {attributes &&
                             attributes.map(({ id, type, items }) => (
                               <>
                                 <p>{id}:</p>
-                                <div className="cart-overlay-size product-info-attributes">
+                                <div className="product-info-attributes cart-item-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id, value, index }) => {
+                                    items.map(({ id: __id, value, index }) => {
+
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => {
+                                            return attr._value === value && attr._id === id
+                                          }
                                         );
+
                                       return (
                                         <span
                                           key={`${id}-${index}`}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute cart-overlay-size-label product-attributes-label"
-                                              : "cart-overlay-size-label product-attributes-label"
+                                              ? "selected-attribute product-attributes-label"
+                                              : "product-attributes-label"
                                           }
                                         >
                                           {value}
@@ -195,10 +181,10 @@ class CartComponent extends Component {
                                       );
                                     })}
                                   {type === "swatch" &&
-                                    items.map(({ id, value }) => {
+                                    items.map(({ id:__id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value
+                                          (attr) => attr._value === value  && attr.id === id
                                         );
                                       return (
                                         <span
@@ -206,8 +192,8 @@ class CartComponent extends Component {
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
-                                              ? "selected-attribute-color cart-overlay-color product-color"
-                                              : "cart-overlay-color product-color"
+                                              ? "selected-attribute-color product-color cart-item-color"
+                                              : "product-color cart-item-color"
                                           }
                                         ></span>
                                       );
@@ -235,7 +221,7 @@ class CartComponent extends Component {
                             +{" "}
                           </span>
                           <span className="quantity-value">
-                            {quantities[index].numberOfItems}
+                            {quantity}
                           </span>
                           <span
                             className="subtract-button"
@@ -247,7 +233,7 @@ class CartComponent extends Component {
                             }
                           >
                             {" "}
-                            -{" "}
+                            - {" "}
                           </span>
                         </div>
                         <div className="image-wrapper">
@@ -311,9 +297,12 @@ class CartComponent extends Component {
         )}
         {bagSize === 0 && (
           <>
-            <main className="cart-details">
-              <h2>Bag Empty!</h2>
-              <p onClick={this.props.navigate("/")}>See Categories</p>
+            <main className="cart-details empty-bag empty-bag-cart">
+              <h1>Bag Empty!</h1>
+              <p>See <a href="/" className="link-to-categories">
+                Categories
+              </a>
+              </p>
             </main>
           </>
         )}
@@ -326,4 +315,4 @@ const mapStateToProps = (state) => ({
   myBag: state.category.myBag,
 });
 
-export default connect(mapStateToProps, null)(withRouterWrapper(CartComponent));
+export default connect(mapStateToProps, { removeCartItemFromBag })(withRouterWrapper(CartComponent));

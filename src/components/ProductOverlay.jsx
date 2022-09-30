@@ -1,44 +1,49 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import "./Product.css";
-import { connect } from "react-redux";
+import "./ProductOverlay.css";
+import cartButton from "../assets/icon/empty_cart.svg";
 
+// Redux
+import { connect } from "react-redux";
 import { getProductById, addToMyBag } from "../actions/categoriesActions";
 import { withRouterWrapper } from "../wrapper/WithRouterComponent";
-import Parser from "html-react-parser";
 
-class ProductComponent extends Component {
+
+class ProductOverlayComponent extends Component {
   constructor() {
     super();
     this.state = {
-      _product: null,
-      currencyIndex: 0, // Default Currency
-      imageLinkToDisplay: null,
-      attribSelected: [{ _id: null, _value: null }],
-    };
+      product: [],
+      productID: null,
+      bagItems: [],
+      productQuantity: 1,
+      currencyIndex: 0,
+      productImage: null,
+      attribSelected: [{ _id: null, _value: null }]
+    }
 
     this.addToBagHandler = this.addToBagHandler.bind(this);
-    this.imageSelectedHandler = this.imageSelectedHandler.bind(this);
+    this.saveAttributeHandler = this.saveAttributeHandler.bind(this);
+    this.changeQuantity = this.changeQuantity.bind(this);
   }
 
-  imageSelectedHandler = (img) => {
-    const _img = img;
-    this.setState({ imageLinkToDisplay: _img });
-  };
-
   async componentDidMount() {
-    // Obtain id from the browser
-    const id = window.location.pathname.substring(1);
+    // Obtain id 
+    const id = this.props.productID;
+    this.setState({ productID: id })
     await this.props.getProductById(id);
 
     // Obtain product info from store
     const product = this.props.product;
-    this.setState({ _product: product });
+    this.setState({ product: product });
 
     // Set default image
     const defaultImage = this.props.product.gallery[0];
-    this.setState({ imageLinkToDisplay: defaultImage });
+    this.setState({ productImage: defaultImage });
 
-  
+    // Obtain the BagItems and set them locally
+    this.setState({ bagItems: this.props.bagCollection })
+
   }
 
   componentDidUpdate(prevProps) {
@@ -92,11 +97,11 @@ class ProductComponent extends Component {
 
   addToBagHandler = () => {
     // Obtain the selectedAttributes
-    const { attribSelected, _product } = this.state;
+    const { attribSelected, product, productQuantity } = this.state;
     let isAlreadyAddedItem = false;
 
     //  Check if there is an exact  existing product name from myBag
-    isAlreadyAddedItem = this.props.bagCollection.filter((bagItem) => bagItem.name === _product.name);
+    isAlreadyAddedItem = this.props.bagCollection.filter((bagItem) => bagItem.name === product.name);
 
     if (isAlreadyAddedItem.length > 0) {
       let isFound = false;
@@ -122,10 +127,10 @@ class ProductComponent extends Component {
       }
       // Incase not found
       else {
-        const { name, gallery, attributes, brand, description, prices } = _product;
+        const { name, gallery, attributes, brand, description, prices } = product;
 
         // Save product
-        const newProductDifferentAttrib= {
+        const newProductDifferentAttrib = {
           name,
           gallery,
           brand,
@@ -140,7 +145,7 @@ class ProductComponent extends Component {
       }
 
     } else {
-      const { name, gallery, attributes, brand, description, prices } = _product;
+      const { name, gallery, attributes, brand, description, prices } = product;
       // Save product
       const newProductItem = {
         name,
@@ -157,50 +162,37 @@ class ProductComponent extends Component {
     }
   };
 
+  changeQuantity = ({ operation }) => {
+    let { productQuantity } = this.state;
+
+    if (operation === "addition") {
+      // Update the quantity value by index
+      this.setState({ productQuantity: productQuantity + 1 })
+    }
+
+    if (operation === "subtraction") {
+      // Reduce value by 1, if its greater.
+      if (productQuantity > 1) {
+        this.setState({ productQuantity: productQuantity - 1 })
+      }
+    };
+  }
+
+
   render() {
-    const { _product } = this.state;
+    const { product, attribSelected, currencyIndex, productQuantity, productImage, productID } = this.state;
+    const { name, brand, prices, attributes } = product;
 
-    if (_product !== null) {
-      const { name, gallery, attributes, brand, inStock, description, prices } =
-        _product;
-
-      return (
-        <>
-          <main className="product-description">
-            <div className="product-image-lists">
-              {gallery.map((imgLink) => {
-                return (
-                  <>
-                    <div
-                      className="img-wrapper-two"
-                      key={imgLink}
-                      onClick={() => this.imageSelectedHandler(imgLink)}
-                    >
-                      <img src={imgLink} alt="" />
-                    </div>
-                  </>
-                );
-              })}
+    return (
+      <>
+        <div className="product-overlay-wrapper">
+          <section className="product-overlay">
+            <div className='product-description product-image-overlay'>
+              <img src={productImage} alt="" />
             </div>
-
-            <div className="product-image-large-display">
-              <div className={
-                !inStock
-                  ? "img-wrapper-product"
-                  : ""
-              }>
-                {!inStock ? (
-                  <div className="out-of-stock-text">Out of stock</div>
-                ) : (
-                  ""
-                )}
-                <img src={this.state.imageLinkToDisplay} alt="" />
-              </div>
-            </div>
-
-            <div className="product-description-detail">
+            <div className="product-description product-overlay-description">
               <h1 className="brand">{brand}</h1>
-              <h2 className="product-name">{name}</h2>
+              <h2 className="product-name product-name-overlay">{name}</h2>
               <section className="product-attributes">
                 {attributes &&
                   attributes.map(({ id: attributeID, type, items }, index) => {
@@ -208,10 +200,10 @@ class ProductComponent extends Component {
                       <>
                         <div key={`${attributeID}-${index}`}>
                           <p>{attributeID}:</p>
-                          <div className="product-info-attributes">
+                          <div className="product-info-attributes product-info-attributes-overlay">
                             {type !== "swatch" &&
                               items.map(({ id, value, index }) => {
-                                let selected = this.state.attribSelected.find(
+                                let selected = attribSelected.find(
                                   (item) =>
                                     item._value === value &&
                                     item._id === attributeID
@@ -227,8 +219,8 @@ class ProductComponent extends Component {
                                     }}
                                     className={
                                       selected
-                                        ? "selected-attribute product-attributes-label"
-                                        : "product-attributes-label"
+                                        ? "selected-attribute product-attributes-label  product-attributes-label-overlay"
+                                        : "product-attributes-label  product-attributes-label-overlay"
                                     }
                                   >
                                     {value}
@@ -237,10 +229,9 @@ class ProductComponent extends Component {
                               })}
                             {type === "swatch" &&
                               items.map(({ id, value }, index) => {
-                                let selected = this.state.attribSelected.find(
+                                let selected = attribSelected.find(
                                   (item) => item._value === value
                                 );
-
                                 return (
                                   <span
                                     key={`${id}-${index}`}
@@ -268,34 +259,56 @@ class ProductComponent extends Component {
               <section className="product-price">
                 <p>Price:</p>
                 <span className="product-price-label">
-                  {prices[this.state.currencyIndex].currency.symbol}
-                  {prices[this.state.currencyIndex].amount.toFixed(2)}
+                  {prices && prices[currencyIndex].currency.symbol}
+                  {prices && prices[currencyIndex].amount.toFixed(2)}
                 </span>
               </section>
-
-              {inStock && attributes.length > 0 && (
-                <div className="add-cart-btn-wrapper">
-                  <div
-                    className="add-cart-btn"
-                    onClick={() => this.addToBagHandler()}
-                  >
-                    Add to cart
-                  </div>
+              <div className="cart-overlay-quantifiers quantifiers product-overlay-quantifiers">
+                <span
+                  className="add-button"
+                  onClick={() =>
+                    this.changeQuantity({
+                      operation: "addition"
+                    })
+                  }
+                >
+                  {" "}
+                  +{" "}
+                </span>
+                <span className="quantity-value">
+                  {productQuantity}
+                </span>
+                <span
+                  className="subtract-button"
+                  onClick={() =>
+                    this.changeQuantity({
+                      operation: "subtraction"
+                    })
+                  }
+                >
+                  {" "}
+                  -{" "}
+                </span>
+              </div>
+              <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
+                <div
+                  className="add-cart-btn add-cart-btn-overlay"
+                  onClick={() => this.addToBagHandler()}
+                >
+                  <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
+                  Add to Cart
                 </div>
-              )}
-
-              <section className="product-description-text">
-                {Parser(description)}
-              </section>
+              </div>
+              <a className='product-details-link' href={productID}>See details</a>
             </div>
-          </main>
-        </>
-      );
-    } else {
-      return <div>Loading!...</div>;
-    }
+            <div className="product-overlay-close-btn" onClick={this.props.clicked}>X</div>
+          </section>
+        </div>
+      </>
+    )
   }
 }
+
 
 const mapStateToProps = (state) => ({
   product: state.category.product,
@@ -304,5 +317,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { getProductById, addToMyBag })(
-  withRouterWrapper(ProductComponent)
-);
+  withRouterWrapper(ProductOverlayComponent));
