@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./Product.css";
 import "./ProductOverlay.css";
+import cartButton from "../assets/icon/empty_cart.svg";
 
 // Redux
 import { connect } from "react-redux";
@@ -24,7 +25,6 @@ class ProductOverlayComponent extends Component {
     this.addToBagHandler = this.addToBagHandler.bind(this);
     this.saveAttributeHandler = this.saveAttributeHandler.bind(this);
     this.changeQuantity = this.changeQuantity.bind(this);
-    this.closeOverlay = this.closeOverlay.bind(this);
   }
 
   async componentDidMount() {
@@ -53,10 +53,6 @@ class ProductOverlayComponent extends Component {
     }
   }
 
-  closeOverlay = () => {
-    console.log("closed overlay!");
-
-  }
   saveAttributeHandler = ({ id, value }) => {
     //  Iterate through attribute record, and add new changes or return null
     // Initiate the first object
@@ -184,7 +180,7 @@ class ProductOverlayComponent extends Component {
 
 
   render() {
-    const { product, attribSelected, currencyIndex, productQuantity, productImage } = this.state;
+    const { product, attribSelected, currencyIndex, productQuantity, productImage, productID } = this.state;
     const { name, brand, prices, attributes } = product;
 
     return (
@@ -296,14 +292,16 @@ class ProductOverlayComponent extends Component {
               </div>
               <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
                 <div
-                  className="add-cart-btn"
+                  className="add-cart-btn add-cart-btn-overlay"
                   onClick={() => this.addToBagHandler()}
                 >
-                  Add to cart
+                  <img className="quick-shop-btn" alt="quick-shop-btn" src={cartButton} />
+                  Add to Cart
                 </div>
               </div>
+              <a className='product-details-link' href={productID}>See details</a>
             </div>
-            <div className="product-overlay-close-btn" onClick={this.closeOverlay}>X</div>
+            <div className="product-overlay-close-btn" onClick={this.props.clicked}>X</div>
           </section>
         </div>
       </>

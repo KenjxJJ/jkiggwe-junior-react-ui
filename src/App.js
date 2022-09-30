@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CategoryComponent from './components/Category';
 import NavBarComponent from './components/NavBar';
-import ProductComponent from './components/Product'; import CartComponent from './components/Cart';
+import ProductComponent from './components/Product';
+import CartComponent from './components/Cart';
 
 // Redux Store Config
 import { Provider } from 'react-redux';

@@ -25,6 +25,7 @@ class CategoryComponent extends Component {
 
     this.showProductOnOverlay = this.showProductOnOverlay.bind(this);
     this.toggleSelection = this.toggleSelection.bind(this);
+    this.closeOverlayHandler = this.closeOverlayHandler.bind(this);
   }
 
   // Show selected product
@@ -41,6 +42,11 @@ class CategoryComponent extends Component {
     });
 
     this.setState({ isSelected: [...newItemsSelected] })
+  }
+
+  // Close the overlays
+  closeOverlayHandler = () => {
+    this.setState({ productByID: null })
   }
 
   componentDidUpdate(prevProps) {
@@ -123,8 +129,8 @@ class CategoryComponent extends Component {
               {/* Show Product Overlay */}
               {productByID !== null && (
                 <ProductOverlayComponent
-                productID={productByID}
-                // clicked={this.closeOverlayHandler}
+                  productID={productByID}
+                  clicked={this.closeOverlayHandler}
                 />
               )}
             </div>
