@@ -23,6 +23,7 @@ h1 {
 
 /* Item */
 .item {
+    cursor: pointer;
     position: relative;
     padding: 1rem;
     margin-right: 2.4rem;
@@ -33,6 +34,11 @@ h1 {
 .items-wrapper .item:focus {
     background: #FFFFFF;
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+}
+
+.items-wrapper .item:active {
+    opacity: 0.9;
+    transition: opacity 150ms ease-in;
 }
 
 a {
@@ -93,6 +99,7 @@ a {
 
 /* Quick Shop Functionality */
 .quick-shop-wrapper {
+    cursor: pointer;
     width: 51px;
     height: 51px;
     border-radius: 50%;
@@ -107,6 +114,7 @@ a {
 }
 
 .quick-shop-btn {
+    display: inline-block;
     width: 24px;
     height: 24px;
 

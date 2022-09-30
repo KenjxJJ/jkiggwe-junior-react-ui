@@ -295,7 +295,7 @@ class ProductOverlayComponent extends Component {
                   className="add-cart-btn add-cart-btn-overlay"
                   onClick={() => this.addToBagHandler()}
                 >
-                  <img className="quick-shop-btn" alt="quick-shop-btn" src={cartButton} />
+                  <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
                   Add to Cart
                 </div>
               </div>
