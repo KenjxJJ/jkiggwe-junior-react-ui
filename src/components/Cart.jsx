@@ -65,7 +65,7 @@ class CartComponent extends Component {
       else {
         // remove from list of items in the bag.
         this.props.removeCartItemFromBag(itemFound);
-        this.setState({ bagSize: 0 });
+        this.setState({ bagSize: this.state.bagSize - 1 });
       }
     }
   };
@@ -142,7 +142,7 @@ class CartComponent extends Component {
                   index
                 ) => (
                   <>
-                    <div className="cart-item">
+                    <div className="cart-item" key={`${name}-${index}`}>
                       <section className="cart-detail-item product-description-detail">
                         <h1 className="brand">{brand}</h1>
                         <h2 className="product-name cart-item-name">{name}</h2>
@@ -169,7 +169,6 @@ class CartComponent extends Component {
 
                                       return (
                                         <span
-                                          key={`${id}-${index}`}
                                           className={
                                             selectedAttrib
                                               ? "selected-attribute product-attributes-label"
@@ -181,14 +180,13 @@ class CartComponent extends Component {
                                       );
                                     })}
                                   {type === "swatch" &&
-                                    items.map(({ id:__id, value }) => {
+                                    items.map(({ id: __id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
-                                          (attr) => attr._value === value  && attr.id === id
+                                          (attr) => attr._value === value && attr.id === id
                                         );
                                       return (
                                         <span
-                                          key={id}
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
