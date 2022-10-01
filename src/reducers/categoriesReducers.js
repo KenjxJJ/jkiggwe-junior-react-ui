@@ -49,18 +49,21 @@ export default function categoriesReducers(state = initialState, action) {
             }
 
             if (isExistingItems.length > 0) {
-                isExistingItems.forEach((singleItem, index) => {
+                isExistingItems.map((singleItem) => {
                     // Check if the existing item has new or same attributes(for stacking purposes)
                     // Obtain array of attributes from the incoming object
-                    let { attribSelected } = singleItem;                
+                    let { attribSelected } = singleItem;
                     if (JSON.stringify(attribSelected.sort(sortFn)) === JSON.stringify(action.payload.attribSelected.sort(sortFn))) {
                         found = true;
+                        singleItem.quantity = action.payload.quantity;
                     }
+
+                    return singleItem;
                 })
             }
 
             // Add first item, or non-existent new item or similar item with new attributes
-            if (state.myBag.length === 0 || !isExistingItems || found === false) {
+            if (state.myBag.length === 0 || isExistingItems === undefined || found === false) {
                 return {
                     ...state,
                     myBag: [...state.myBag, action.payload]

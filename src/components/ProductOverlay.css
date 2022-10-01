@@ -81,7 +81,6 @@
     margin-bottom: 0px !important;
 }
 
-/*  */
 .product-overlay-quantifiers {
     display: flex;
     margin-top: 1.5rem;
@@ -102,6 +101,8 @@
     margin-bottom: 24px !important;
     text-decoration: underline;
 }
+
+/* Add to Cart Buttons */
 .quick-shop-btn-overlay{
     display: inline-block;
     margin-right: 6px;
