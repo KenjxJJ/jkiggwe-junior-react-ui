@@ -84,7 +84,7 @@ class CategoryComponent extends Component {
                     return (
                       <>
                         <section className="item" key={`${id}-${index}`}>
-                          <a onClick={() => this.toggleSelection(id)}>
+                          <span onClick={() => this.toggleSelection(id)}>
                             <div
                               className={
                                 !inStock
@@ -112,7 +112,7 @@ class CategoryComponent extends Component {
                                 <img className="quick-shop-btn" alt="quick-shop-btn" src={cartButton} />
                               </div>
                             ) : ""}
-                          </a>
+                          </span>
                         </section>
                       </>
                     );

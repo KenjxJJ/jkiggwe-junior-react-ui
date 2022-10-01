@@ -98,6 +98,7 @@
     opacity: 0.7;
     text-align: right;
     text-transform: capitalize;
+    margin-top: 12px !important;
     margin-bottom: 24px !important;
     text-decoration: underline;
 }

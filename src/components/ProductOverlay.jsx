@@ -112,18 +112,22 @@ class ProductOverlayComponent extends Component {
         // Obtain attrib array
         let { attribSelected: attributesFromStore } = item;
 
-        attributesFromStore.forEach((attrib) => {
-          if (attrib._value !== attribSelected._value) {
-            // Obtain the position/location
+        attributesFromStore.forEach((attrib, _index) => {
+          if (attrib._value === attribSelected[_index]._value) {
+            // Obtain the position/location 
             foundIndex = index;
             isFound = true;
           }
         })
       });
 
-      if (!isFound) {
+      if (isFound && foundIndex !== -1) {
+        // Obtain item
+        let foundItem = isAlreadyAddedItem[foundIndex];
+        // add quantity  to the item
+        foundItem.quantity = productQuantity + foundItem.quantity;
         // add to cart
-        this.props.addToMyBag(isAlreadyAddedItem[foundIndex]);
+        this.props.addToMyBag(foundItem);
       }
       // Incase not found
       else {
@@ -138,7 +142,7 @@ class ProductOverlayComponent extends Component {
           prices,
           attributes,
           attribSelected,
-          quantity: 1
+          quantity: productQuantity
         };
         // add to cart
         this.props.addToMyBag(newProductDifferentAttrib);
@@ -155,7 +159,7 @@ class ProductOverlayComponent extends Component {
         prices,
         attributes,
         attribSelected,
-        quantity: 1
+        quantity: productQuantity
       };
       // add to cart
       this.props.addToMyBag(newProductItem);
@@ -290,15 +294,23 @@ class ProductOverlayComponent extends Component {
                   -{" "}
                 </span>
               </div>
-              <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
-                <div
-                  className="add-cart-btn add-cart-btn-overlay"
-                  onClick={() => this.addToBagHandler()}
-                >
-                  <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
-                  Add to Cart
-                </div>
-              </div>
+
+              {console.log(attribSelected)}
+              {attribSelected[0]._id !== null
+                ?
+                (attribSelected.length === attributes.length
+                ) && (
+                  <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
+                    <div
+                      className="add-cart-btn add-cart-btn-overlay"
+                      onClick={() => this.addToBagHandler()}
+                    >
+                      <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
+                      Add to Cart
+                    </div>
+                  </div>
+                ) : ""
+              }
               <a className='product-details-link' href={productID}>See details</a>
             </div>
             <div className="product-overlay-close-btn" onClick={this.props.clicked}>X</div>
