@@ -38,7 +38,7 @@ class ProductComponent extends Component {
     const defaultImage = this.props.product.gallery[0];
     this.setState({ imageLinkToDisplay: defaultImage });
 
-  
+
   }
 
   componentDidUpdate(prevProps) {
@@ -90,42 +90,55 @@ class ProductComponent extends Component {
     this.setState({ attribSelected: [...newAttributes] });
   };
 
+
+
   addToBagHandler = () => {
     // Obtain the selectedAttributes
     const { attribSelected, _product } = this.state;
-    let isAlreadyAddedItem = false;
+    let isAlreadyAddedItems = false;
 
     //  Check if there is an exact  existing product name from myBag
-    isAlreadyAddedItem = this.props.bagCollection.filter((bagItem) => bagItem.name === _product.name);
+    isAlreadyAddedItems = this.props.bagCollection.filter((bagItem) => bagItem.name === _product.name);
 
-    if (isAlreadyAddedItem.length > 0) {
+    // Sorting function
+    function sortFn(a, b) {
+      let x = a._id.toLowerCase();
+      let y = b._id.toLowerCase();
+      if (x < y) { return -1; }
+      if (x > y) { return 1; }
+      return 0;
+    }
+
+    if (isAlreadyAddedItems.length > 0) {
       let isFound = false;
       let foundIndex = -1;
 
       // Check if the attributesSelected are present 
-      isAlreadyAddedItem.forEach((item, index) => {
+      isAlreadyAddedItems.forEach((item, index) => {
         // Obtain attrib array
         let { attribSelected: attributesFromStore } = item;
 
-        attributesFromStore.forEach((attrib) => {
-          if (attrib._value !== attribSelected._value) {
-            // Obtain the position/location
-            foundIndex = index;
-            isFound = true;
-          }
-        })
+        if (JSON.stringify(attributesFromStore.sort(sortFn)) === JSON.stringify(attribSelected.sort(sortFn))) {
+          foundIndex = index;
+          isFound = true;
+        }
+
       });
 
-      if (!isFound) {
+      if (isFound && foundIndex !== -1) {
+        // Obtain item
+        let foundItem = isAlreadyAddedItems[foundIndex];
+        // add quantity  to the item
+        foundItem.quantity = foundItem.quantity + 1;
         // add to cart
-        this.props.addToMyBag(isAlreadyAddedItem[foundIndex]);
+        this.props.addToMyBag(foundItem);
       }
       // Incase not found
       else {
         const { name, gallery, attributes, brand, description, prices } = _product;
 
         // Save product
-        const newProductDifferentAttrib= {
+        const newProductDifferentAttrib = {
           name,
           gallery,
           brand,
@@ -206,7 +219,7 @@ class ProductComponent extends Component {
                   attributes.map(({ id: attributeID, type, items }, index) => {
                     return (
                       <>
-                        <div key={`${attributeID}-${index}`}>
+                        <div key={`${attributeID}-${index + 2}`}>
                           <p>{attributeID}:</p>
                           <div className="product-info-attributes">
                             {type !== "swatch" &&
@@ -218,7 +231,7 @@ class ProductComponent extends Component {
                                 );
                                 return (
                                   <span
-                                    key={`${id}-${index}`}
+                                    key={`${id}-${index + 1}`}
                                     onClick={() => {
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -243,7 +256,7 @@ class ProductComponent extends Component {
 
                                 return (
                                   <span
-                                    key={`${id}-${index}`}
+                                    key={`${id}-${index + 1}`}
                                     onClick={() =>
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -273,18 +286,21 @@ class ProductComponent extends Component {
                 </span>
               </section>
 
-              {inStock && attributes.length > 0 && (
-                <div className="add-cart-btn-wrapper">
-                  <div
-                    className="add-cart-btn"
-                    onClick={() => this.addToBagHandler()}
-                  >
-                    Add to cart
-                  </div>
-                </div>
-              )}
+              {inStock && attributes.length > 0 ? (
+                this.state.attribSelected[0]._id !== null && this.state.attribSelected.length === attributes.length ?
+                  (
+                    <div className="add-cart-btn-wrapper">
+                      <div
+                        className="add-cart-btn"
+                        onClick={() => this.addToBagHandler()}
+                      >
+                        Add to cart
+                      </div>
+                    </div>
+                  ) : ""
+              ) : ""}
 
-              <section className="product-description-text">
+              < section className="product-description-text">
                 {Parser(description)}
               </section>
             </div>

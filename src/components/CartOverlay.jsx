@@ -49,7 +49,7 @@ class CartOverlayComponent extends Component {
       else {
         // remove from list of items in the bag.
         this.props.removeCartItemFromBag(itemFound);
-        this.setState({ bagSize: 0 });
+        this.setState({ bagSize: this.state.bagSize - 1 });
       }
     }
   };
@@ -93,7 +93,6 @@ class CartOverlayComponent extends Component {
         this.changeTotalPrice();
       });
     }
-
   }
 
   render() {
@@ -121,7 +120,7 @@ class CartOverlayComponent extends Component {
                   index
                 ) => (
                   <>
-                    <div className="cart-overlay-item cart-item">
+                    <div className="cart-overlay-item cart-item" key={`${name}-${index}`}>
                       <section className="cart-overlay-description-detail product-description-detail">
                         <h2 className="cart-overlay-name">
                           {brand} <br />
@@ -139,14 +138,13 @@ class CartOverlayComponent extends Component {
                                 <p>{id}:</p>
                                 <div className="cart-overlay-size product-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id:__id, value, index }) => {
+                                    items.map(({ id: __id, value, index }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
                                           (attr) => attr._value === value && attr._id === id
                                         );
                                       return (
                                         <span
-                                          key={`${id}-${index}`}
                                           className={
                                             selectedAttrib
                                               ? "selected-attribute cart-overlay-size-label product-attributes-label"
@@ -158,14 +156,13 @@ class CartOverlayComponent extends Component {
                                       );
                                     })}
                                   {type === "swatch" &&
-                                    items.map(({ id:__id, value }) => {
+                                    items.map(({ id: __id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
                                           (attr) => attr._value === value && attr.id === id
                                         );
                                       return (
                                         <span
-                                          key={id}
                                           style={{ backgroundColor: value }}
                                           className={
                                             selectedAttrib
@@ -249,7 +246,7 @@ class CartOverlayComponent extends Component {
             </div>
           </main>
         )}
-        {this.state.bagSize === 0 && (
+        {bagSize === 0 && (
           <>
             <main className="cart-overlay empty-bag">
               <h2>Bag Empty!</h2>

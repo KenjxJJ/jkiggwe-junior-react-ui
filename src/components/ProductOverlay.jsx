@@ -98,32 +98,43 @@ class ProductOverlayComponent extends Component {
   addToBagHandler = () => {
     // Obtain the selectedAttributes
     const { attribSelected, product, productQuantity } = this.state;
-    let isAlreadyAddedItem = false;
-
+    
+    let isAlreadyAddedItems = false;
     //  Check if there is an exact  existing product name from myBag
-    isAlreadyAddedItem = this.props.bagCollection.filter((bagItem) => bagItem.name === product.name);
+    isAlreadyAddedItems = this.props.bagCollection.filter((bagItem) => bagItem.name === product.name);
 
-    if (isAlreadyAddedItem.length > 0) {
+    // Sorting function
+    function sortFn(a, b) {
+      let x = a._id.toLowerCase();
+      let y = b._id.toLowerCase();
+      if (x < y) { return -1; }
+      if (x > y) { return 1; }
+      return 0;
+    }
+
+    if (isAlreadyAddedItems.length > 0) {
       let isFound = false;
       let foundIndex = -1;
 
       // Check if the attributesSelected are present 
-      isAlreadyAddedItem.forEach((item, index) => {
+      isAlreadyAddedItems.forEach((item, index) => {
         // Obtain attrib array
         let { attribSelected: attributesFromStore } = item;
 
-        attributesFromStore.forEach((attrib) => {
-          if (attrib._value !== attribSelected._value) {
-            // Obtain the position/location
-            foundIndex = index;
-            isFound = true;
-          }
-        })
+        // Search for similarity
+        if (JSON.stringify(attributesFromStore.sort(sortFn)) === JSON.stringify(attribSelected.sort(sortFn))) {
+          foundIndex = index;
+          isFound = true;
+        }
       });
 
-      if (!isFound) {
+      if (isFound && foundIndex !== -1) {
+        // Obtain item
+        let foundItem = isAlreadyAddedItems[foundIndex];
+        // add quantity  to the item
+        foundItem.quantity = productQuantity + foundItem.quantity;
         // add to cart
-        this.props.addToMyBag(isAlreadyAddedItem[foundIndex]);
+        this.props.addToMyBag(foundItem);
       }
       // Incase not found
       else {
@@ -138,7 +149,7 @@ class ProductOverlayComponent extends Component {
           prices,
           attributes,
           attribSelected,
-          quantity: 1
+          quantity: productQuantity
         };
         // add to cart
         this.props.addToMyBag(newProductDifferentAttrib);
@@ -155,7 +166,7 @@ class ProductOverlayComponent extends Component {
         prices,
         attributes,
         attribSelected,
-        quantity: 1
+        quantity: productQuantity
       };
       // add to cart
       this.props.addToMyBag(newProductItem);
@@ -290,15 +301,22 @@ class ProductOverlayComponent extends Component {
                   -{" "}
                 </span>
               </div>
-              <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
-                <div
-                  className="add-cart-btn add-cart-btn-overlay"
-                  onClick={() => this.addToBagHandler()}
-                >
-                  <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
-                  Add to Cart
-                </div>
-              </div>
+
+              {attribSelected[0]._id !== null
+                ?
+                (attribSelected.length === attributes.length
+                ) && (
+                  <div className="add-cart-btn-wrapper add-cart-btn-wrapper-overlay">
+                    <div
+                      className="add-cart-btn add-cart-btn-overlay"
+                      onClick={() => this.addToBagHandler()}
+                    >
+                      <img className="quick-shop-btn quick-shop-btn-overlay" alt="quick-shop-btn" src={cartButton} />
+                      Add to Cart
+                    </div>
+                  </div>
+                ) : ""
+              }
               <a className='product-details-link' href={productID}>See details</a>
             </div>
             <div className="product-overlay-close-btn" onClick={this.props.clicked}>X</div>
