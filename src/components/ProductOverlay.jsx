@@ -295,7 +295,6 @@ class ProductOverlayComponent extends Component {
                 </span>
               </div>
 
-              {console.log(attribSelected)}
               {attribSelected[0]._id !== null
                 ?
                 (attribSelected.length === attributes.length

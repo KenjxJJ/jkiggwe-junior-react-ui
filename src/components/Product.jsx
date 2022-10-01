@@ -38,7 +38,7 @@ class ProductComponent extends Component {
     const defaultImage = this.props.product.gallery[0];
     this.setState({ imageLinkToDisplay: defaultImage });
 
-  
+
   }
 
   componentDidUpdate(prevProps) {
@@ -125,7 +125,7 @@ class ProductComponent extends Component {
         const { name, gallery, attributes, brand, description, prices } = _product;
 
         // Save product
-        const newProductDifferentAttrib= {
+        const newProductDifferentAttrib = {
           name,
           gallery,
           brand,
@@ -206,7 +206,7 @@ class ProductComponent extends Component {
                   attributes.map(({ id: attributeID, type, items }, index) => {
                     return (
                       <>
-                        <div key={`${attributeID}-${index}`}>
+                        <div key={`${attributeID}-${index+2}`}>
                           <p>{attributeID}:</p>
                           <div className="product-info-attributes">
                             {type !== "swatch" &&
@@ -218,7 +218,7 @@ class ProductComponent extends Component {
                                 );
                                 return (
                                   <span
-                                    key={`${id}-${index}`}
+                                    key={`${id}-${index+1}`}
                                     onClick={() => {
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -243,7 +243,7 @@ class ProductComponent extends Component {
 
                                 return (
                                   <span
-                                    key={`${id}-${index}`}
+                                    key={`${id}-${index+1}`}
                                     onClick={() =>
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -273,18 +273,21 @@ class ProductComponent extends Component {
                 </span>
               </section>
 
-              {inStock && attributes.length > 0 && (
-                <div className="add-cart-btn-wrapper">
-                  <div
-                    className="add-cart-btn"
-                    onClick={() => this.addToBagHandler()}
-                  >
-                    Add to cart
-                  </div>
-                </div>
-              )}
+              {inStock && attributes.length > 0 ? (
+                this.state.attribSelected[0]._id !== null && this.state.attribSelected.length === attributes.length ?
+                  (
+                    <div className="add-cart-btn-wrapper">
+                      <div
+                        className="add-cart-btn"
+                        onClick={() => this.addToBagHandler()}
+                      >
+                        Add to cart
+                      </div>
+                    </div>
+                  ) : ""
+              ) : ""}
 
-              <section className="product-description-text">
+              < section className="product-description-text">
                 {Parser(description)}
               </section>
             </div>
