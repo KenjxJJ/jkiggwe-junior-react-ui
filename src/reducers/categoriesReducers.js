@@ -54,7 +54,6 @@ export default function categoriesReducers(state = initialState, action) {
                     // Obtain array of attributes from the incoming object
                     let { attribSelected } = singleItem;                
                     if (JSON.stringify(attribSelected.sort(sortFn)) === JSON.stringify(action.payload.attribSelected.sort(sortFn))) {
-                        isExistingItems[index].quantity += 1;
                         found = true;
                     }
                 })

@@ -107,8 +107,8 @@ class ProductComponent extends Component {
         // Obtain attrib array
         let { attribSelected: attributesFromStore } = item;
 
-        attributesFromStore.forEach((attrib) => {
-          if (attrib._value !== attribSelected._value) {
+        attributesFromStore.forEach((attrib, _index) => {
+          if (attrib._value === attribSelected[_index]._value) {
             // Obtain the position/location
             foundIndex = index;
             isFound = true;
@@ -116,9 +116,13 @@ class ProductComponent extends Component {
         })
       });
 
-      if (!isFound) {
+      if (isFound && foundIndex !== -1) {
+        // Obtain item
+        let foundItem = isAlreadyAddedItem[foundIndex];
+        // add quantity  to the item
+        foundItem.quantity = foundItem.quantity + 1;
         // add to cart
-        this.props.addToMyBag(isAlreadyAddedItem[foundIndex]);
+        this.props.addToMyBag(foundItem);
       }
       // Incase not found
       else {
@@ -206,7 +210,7 @@ class ProductComponent extends Component {
                   attributes.map(({ id: attributeID, type, items }, index) => {
                     return (
                       <>
-                        <div key={`${attributeID}-${index+2}`}>
+                        <div key={`${attributeID}-${index + 2}`}>
                           <p>{attributeID}:</p>
                           <div className="product-info-attributes">
                             {type !== "swatch" &&
@@ -218,7 +222,7 @@ class ProductComponent extends Component {
                                 );
                                 return (
                                   <span
-                                    key={`${id}-${index+1}`}
+                                    key={`${id}-${index + 1}`}
                                     onClick={() => {
                                       this.saveAttributeHandler({
                                         id: attributeID,
@@ -243,7 +247,7 @@ class ProductComponent extends Component {
 
                                 return (
                                   <span
-                                    key={`${id}-${index+1}`}
+                                    key={`${id}-${index + 1}`}
                                     onClick={() =>
                                       this.saveAttributeHandler({
                                         id: attributeID,
