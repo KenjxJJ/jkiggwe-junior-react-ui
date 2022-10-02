@@ -158,7 +158,7 @@ class CartComponent extends Component {
                                 <p>{id}:</p>
                                 <div className="product-info-attributes cart-item-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id: __id, value, index }) => {
+                                    items.map(({ id: __id, value }) => {
 
                                       const selectedAttrib =
                                         attribSelected.find(

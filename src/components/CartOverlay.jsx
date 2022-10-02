@@ -138,7 +138,7 @@ class CartOverlayComponent extends Component {
                                 <p>{id}:</p>
                                 <div className="cart-overlay-size product-info-attributes">
                                   {type !== "swatch" &&
-                                    items.map(({ id: __id, value, index }) => {
+                                    items.map(({ id: __id, value }) => {
                                       const selectedAttrib =
                                         attribSelected.find(
                                           (attr) => attr._value === value && attr._id === id
@@ -192,7 +192,6 @@ class CartOverlayComponent extends Component {
                             +{" "}
                           </span>
                           <span className="quantity-value">
-                            {/* {quantities[index].numberOfItems} */}
                             {quantity}
                           </span>
                           <span
