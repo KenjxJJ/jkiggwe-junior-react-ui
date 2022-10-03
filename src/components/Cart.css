@@ -28,11 +28,11 @@
     font-size: 170% !important;
 }
 
-.cart-details p{
-     font-size: 20px !important;
+.cart-details p {
+    font-size: 20px !important;
 }
 
-.cart-details .link-to-categories{
+.cart-details .link-to-categories {
     display: inline-block;
     font-weight: 500;
     border-bottom: 2px solid #5ece7b;
@@ -135,6 +135,7 @@ p.product-price-label {
     position: absolute;
     right: 16px;
     bottom: 16px;
+    cursor: pointer;
 }
 
 .arrows>* {
